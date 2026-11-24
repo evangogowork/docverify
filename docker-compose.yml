@@ -1,0 +1,35 @@
+# Local AWS (LocalStack 4.9 — pinned: newer images require an auth token),
+# MySQL for audit records, Redis for dedup keys.
+name: docverify
+services:
+  localstack:
+    image: localstack/localstack:4.9
+    ports: ["45661:4566"]
+    environment:
+      SERVICES: s3,sqs,lambda,dynamodb,logs,iam,sts
+      # Lambda containers join this compose network so the intake handler can reach MySQL.
+      LAMBDA_DOCKER_NETWORK: docverify_default
+      LAMBDA_RUNTIME_ENVIRONMENT_TIMEOUT: "60"
+    volumes:
+      # The Docker socket as seen by the daemon (inside the colima VM this is the real one).
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs localhost:4566/_localstack/health | grep -q '\"dynamodb\"'"]
+      interval: 3s
+      retries: 40
+  mysql:
+    image: mysql:8.4
+    command: ["--performance-schema=OFF", "--innodb-buffer-pool-size=64M", "--max-connections=200"]
+    ports: ["33501:3306"]
+    environment:
+      MYSQL_DATABASE: docverify
+      MYSQL_USER: docverify
+      MYSQL_PASSWORD: docverify-dev        # local dev placeholder
+      MYSQL_ROOT_PASSWORD: docverify-root-dev
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -udocverify -pdocverify-dev --silent"]
+      interval: 3s
+      retries: 40
+  redis:
+    image: redis:7-alpine
+    ports: ["63501:6379"]
