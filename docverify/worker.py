@@ -127,6 +127,7 @@ class Worker:
             dedup.release(cid, rnd, self.id)
     # @learn:end worker-handle
 
+    # @learn:ack
     def _ack(self, msg: dict) -> bool:
         try:
             sqs().delete_message(QueueUrl=queue_url(), ReceiptHandle=msg["ReceiptHandle"])
@@ -137,7 +138,9 @@ class Worker:
             if e.response["Error"]["Code"] in ("InvalidParameterValue", "ReceiptHandleIsInvalid"):
                 return False
             raise
+    # @learn:end ack
 
+    # @learn:retry-backoff
     def _retry_later(self, msg: dict) -> None:
         """Bounded retry with exponential backoff; SQS's redrive policy moves it to the DLQ after max receives."""
         n = int(msg.get("Attributes", {}).get("ApproximateReceiveCount", 1))
@@ -149,6 +152,7 @@ class Worker:
                                             VisibilityTimeout=delay)
         except Exception:
             pass
+    # @learn:end retry-backoff
 
     # @learn:dlq
     def drain_dlq(self) -> int:
@@ -186,12 +190,14 @@ class Worker:
     # @learn:end sweeper
 
     def run_once(self, wait: int = 2) -> int:
+        # @learn:receive-batch
         # Take only what we can finish inside the visibility timeout. Prefetching ten and working through
         # them one by one lets the tail of the batch time out and get redelivered, and a killed worker
         # burns a receive on every message it was holding.
         batch = int(os.environ.get("DOCVERIFY_RECEIVE_BATCH", "1"))
         r = sqs().receive_message(QueueUrl=queue_url(), MaxNumberOfMessages=batch, WaitTimeSeconds=wait,
                                   AttributeNames=["All"])
+        # @learn:end receive-batch
         msgs = r.get("Messages", [])
         for m in msgs:
             try:

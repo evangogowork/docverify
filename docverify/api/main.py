@@ -304,3 +304,79 @@ def sample(kind: str, account_id: str, doc_type: str = "business_license"):
         raise HTTPException(404, "unknown account or sample kind")
     data, ctype, name = samples.make(kind, acct, doc_type, seed=int(time.time()))
     return Response(data, media_type=ctype, headers={"X-Filename": name, "Access-Control-Expose-Headers": "X-Filename"})
+
+
+# ---- learn mode ---------------------------------------------------------------------------------
+LEARN_PRINCIPAL = {"platform": "learn", "sub": "learn-demo", "role": "platform"}
+
+
+def _learn_on() -> None:
+    if not settings().learn_mode:
+        raise HTTPException(404, "learn mode is off")
+
+
+class LearnRun(BaseModel):
+    scenario: str = "lowres"
+
+
+# @learn:learn-run-api
+@app.post("/v1/learn/runs", status_code=201)
+def learn_start(body: LearnRun):
+    """Submit a real sample through the real pipeline, as the 'learn' demo platform."""
+    _learn_on()
+    from .. import learn
+    if body.scenario not in learn.SCENARIOS:
+        raise HTTPException(422, f"scenario must be one of {sorted(learn.SCENARIOS)}")
+    account_id, kind = learn.SCENARIOS[body.scenario]
+    data, ctype, name = samples.make(kind, accounts.get(account_id), seed=7)
+    return create_case(LEARN_PRINCIPAL, account_id, "business_license", name, data, ctype)
+
+
+@app.get("/v1/learn/runs/{case_id}")
+def learn_trace(case_id: str):
+    _learn_on()
+    from .. import learn
+    c = cases.get_case(case_id)
+    if c is None or c.get("platform") != "learn":
+        raise HTTPException(404, "no such learn run")
+    return learn.trace(case_id)
+# @learn:end learn-run-api
+
+
+@app.post("/v1/learn/runs/{case_id}/review")
+def learn_review(case_id: str, body: Decision):
+    _learn_on()
+    c = cases.get_case(case_id)
+    if c is None or c.get("platform") != "learn":
+        raise HTTPException(404, "no such learn run")
+    return decide_review(case_id, "learn-reviewer", Decision(decision=body.decision, reason="decided in learn mode"),
+                         require_claim=False)
+
+
+@app.post("/v1/learn/runs/{case_id}/replay")
+def learn_replay(case_id: str):
+    """Send a duplicate of the case's SQS message, to watch the worker drop it."""
+    _learn_on()
+    import json as _json
+    from ..aws import queue_url, sqs
+    c = cases.get_case(case_id)
+    if c is None or c.get("platform") != "learn":
+        raise HTTPException(404, "no such learn run")
+    body = {"case_id": case_id, "account_id": c["account_id"], "round": c["round"], "bucket": settings().bucket,
+            "key": c["s3_key"], "sha256": c["sha256"], "enqueued_at": time.time(), "replay": True}
+    r = sqs().send_message(QueueUrl=queue_url(), MessageBody=_json.dumps(body), MessageGroupId=c["account_id"],
+                           MessageDeduplicationId=f"{case_id}-replay-{time.time_ns()}")
+    return {"message_id": r["MessageId"]}
+
+
+@app.get("/v1/learn/eval")
+def learn_eval():
+    _learn_on()
+    import json as _json
+    from pathlib import Path
+    f = Path(__file__).resolve().parents[2] / "evals" / "report.json"
+    if not f.exists():
+        raise HTTPException(404, "run `python -m evals.run` first")
+    r = _json.loads(f.read_text())
+    r.pop("rows", None)
+    return r

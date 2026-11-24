@@ -5,6 +5,7 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 TESTS="tests/test_step02_states.py tests/test_step06_chaos.py"
+# @learn:failure-controls
 for flags in "" "DOCVERIFY_UNSAFE_NO_CONDITIONAL_WRITES=1" "DOCVERIFY_UNSAFE_NO_DEDUP=1" \
              "DOCVERIFY_UNSAFE_NO_CONDITIONAL_WRITES=1 DOCVERIFY_UNSAFE_NO_DEDUP=1"; do
   echo "=== ${flags:-all protections on}"
@@ -13,3 +14,4 @@ for flags in "" "DOCVERIFY_UNSAFE_NO_CONDITIONAL_WRITES=1" "DOCVERIFY_UNSAFE_NO_
   # shellcheck disable=SC2086
   env $flags .venv/bin/pytest $TESTS -p no:warnings 2>&1 | grep -E "^FAILED|passed|failed" | sed 's/^/  /'
 done
+# @learn:end failure-controls

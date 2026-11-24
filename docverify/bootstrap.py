@@ -72,6 +72,7 @@ def ensure_lambda() -> None:
     lam = client("lambda")
     code = lambda_pkg.build_zip()
     env = {"Variables": {**LAMBDA_ENV, "DOCVERIFY_TABLE": s.table, "DOCVERIFY_QUEUE": s.queue}}
+    # @learn:lambda-deploy
     sha = base64.b64encode(hashlib.sha256(code).digest()).decode()
     try:
         cfg = lam.get_function(FunctionName=s.lambda_name)["Configuration"]
@@ -82,6 +83,7 @@ def ensure_lambda() -> None:
             _wait_lambda(lam, s.lambda_name)
         if cfg.get("Environment", {}).get("Variables") != env["Variables"]:
             lam.update_function_configuration(FunctionName=s.lambda_name, Environment=env)
+    # @learn:end lambda-deploy
     except ClientError:
         lam.create_function(
             FunctionName=s.lambda_name, Runtime="python3.11", Handler="handler.handler",

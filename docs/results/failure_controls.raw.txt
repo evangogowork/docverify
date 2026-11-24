@@ -1,0 +1,19 @@
+=== all protections on
+  flags seen by python: no_conditional_writes=False no_dedup=False
+=== DOCVERIFY_UNSAFE_NO_CONDITIONAL_WRITES=1
+  flags seen by python: no_conditional_writes=True no_dedup=False
+  FAILED tests/test_step02_states.py::test_stale_from_state_is_a_conflict - Fai...
+  FAILED tests/test_step02_states.py::test_concurrent_decisions_exactly_one_wins
+  FAILED tests/test_step06_chaos.py::test_lock_expiring_mid_extraction_still_commits_once
+=== DOCVERIFY_UNSAFE_NO_DEDUP=1
+  flags seen by python: no_conditional_writes=False no_dedup=True
+  FAILED tests/test_step06_chaos.py::test_concurrent_copies_do_not_redo_extraction
+=== DOCVERIFY_UNSAFE_NO_CONDITIONAL_WRITES=1 DOCVERIFY_UNSAFE_NO_DEDUP=1
+  flags seen by python: no_conditional_writes=True no_dedup=True
+  FAILED tests/test_step02_states.py::test_stale_from_state_is_a_conflict - Fai...
+  FAILED tests/test_step02_states.py::test_concurrent_decisions_exactly_one_wins
+  FAILED tests/test_step06_chaos.py::test_duplicates_and_kills_never_double_process
+  FAILED tests/test_step06_chaos.py::test_lock_expiring_mid_extraction_still_commits_once
+  FAILED tests/test_step06_chaos.py::test_concurrent_copies_do_not_redo_extraction
+=== all protections on (rerun without -qq)
+  10 passed in 149.91s

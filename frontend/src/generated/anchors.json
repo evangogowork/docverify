@@ -1,0 +1,242 @@
+{
+  "ack": {
+    "path": "docverify/worker.py",
+    "start": 130,
+    "end": 141
+  },
+  "alias-index": {
+    "path": "docverify/match.py",
+    "start": 101,
+    "end": 126
+  },
+  "auth": {
+    "path": "docverify/auth.py",
+    "start": 59,
+    "end": 93
+  },
+  "claim": {
+    "path": "docverify/api/main.py",
+    "start": 236,
+    "end": 258
+  },
+  "conditional-write": {
+    "path": "docverify/states.py",
+    "start": 91,
+    "end": 103
+  },
+  "decide": {
+    "path": "docverify/decide.py",
+    "start": 18,
+    "end": 42
+  },
+  "dedup": {
+    "path": "docverify/dedup.py",
+    "start": 35,
+    "end": 55
+  },
+  "dispatch": {
+    "path": "docverify/callbacks.py",
+    "start": 67,
+    "end": 103
+  },
+  "dlq": {
+    "path": "docverify/worker.py",
+    "start": 157,
+    "end": 175
+  },
+  "eval-gate": {
+    "path": "evals/run.py",
+    "start": 134,
+    "end": 147
+  },
+  "eval-run": {
+    "path": "evals/run.py",
+    "start": 77,
+    "end": 131
+  },
+  "extractor-protocol": {
+    "path": "docverify/extract.py",
+    "start": 58,
+    "end": 63
+  },
+  "failure-controls": {
+    "path": "scripts/failure_controls.sh",
+    "start": 8,
+    "end": 17
+  },
+  "lambda-deploy": {
+    "path": "docverify/bootstrap.py",
+    "start": 75,
+    "end": 86
+  },
+  "lambda-intake": {
+    "path": "lambdas/intake/handler.py",
+    "start": 18,
+    "end": 43
+  },
+  "learn-run-api": {
+    "path": "docverify/api/main.py",
+    "start": 322,
+    "end": 343
+  },
+  "learn-trace": {
+    "path": "docverify/learn.py",
+    "start": 47,
+    "end": 118
+  },
+  "normalize": {
+    "path": "docverify/match.py",
+    "start": 41,
+    "end": 52
+  },
+  "ocr": {
+    "path": "docverify/extract.py",
+    "start": 151,
+    "end": 176
+  },
+  "q01-before": {
+    "path": "docs/problems/snippets/before_fixes.py",
+    "start": 4,
+    "end": 16
+  },
+  "q02-before": {
+    "path": "docs/problems/snippets/before_fixes.py",
+    "start": 19,
+    "end": 25
+  },
+  "q03-before": {
+    "path": "docs/problems/snippets/before_fixes.py",
+    "start": 28,
+    "end": 35
+  },
+  "q04-before": {
+    "path": "docs/problems/snippets/before_fixes.py",
+    "start": 38,
+    "end": 44
+  },
+  "q05-before": {
+    "path": "docs/problems/snippets/before_fixes.sh",
+    "start": 3,
+    "end": 9
+  },
+  "q06-before": {
+    "path": "docs/problems/snippets/before_fixes.py",
+    "start": 47,
+    "end": 53
+  },
+  "q07-before": {
+    "path": "docs/problems/snippets/before_fixes.py",
+    "start": 56,
+    "end": 59
+  },
+  "q08-before": {
+    "path": "docs/problems/snippets/before_fixes.py",
+    "start": 62,
+    "end": 67
+  },
+  "q09-before": {
+    "path": "docs/problems/snippets/before_fixes.py",
+    "start": 70,
+    "end": 77
+  },
+  "q10-before": {
+    "path": "docs/problems/snippets/before_fixes.py",
+    "start": 80,
+    "end": 85
+  },
+  "receive-batch": {
+    "path": "docverify/worker.py",
+    "start": 193,
+    "end": 200
+  },
+  "resubmit": {
+    "path": "docverify/api/main.py",
+    "start": 148,
+    "end": 168
+  },
+  "retry-backoff": {
+    "path": "docverify/worker.py",
+    "start": 143,
+    "end": 155
+  },
+  "review-heap": {
+    "path": "docverify/review.py",
+    "start": 17,
+    "end": 57
+  },
+  "s3-notification": {
+    "path": "docverify/bootstrap.py",
+    "start": 100,
+    "end": 106
+  },
+  "scan-paginated": {
+    "path": "docverify/cases.py",
+    "start": 78,
+    "end": 96
+  },
+  "sign": {
+    "path": "docverify/callbacks.py",
+    "start": 45,
+    "end": 60
+  },
+  "similarity": {
+    "path": "docverify/match.py",
+    "start": 55,
+    "end": 85
+  },
+  "state-machine": {
+    "path": "docverify/states.py",
+    "start": 21,
+    "end": 38
+  },
+  "sweeper": {
+    "path": "docverify/worker.py",
+    "start": 177,
+    "end": 190
+  },
+  "test-chaos": {
+    "path": "tests/test_step06_chaos.py",
+    "start": 84,
+    "end": 98
+  },
+  "test-concurrent-decisions": {
+    "path": "tests/test_step02_states.py",
+    "start": 37,
+    "end": 61
+  },
+  "test-policy": {
+    "path": "tests/test_step05_match_decide.py",
+    "start": 69,
+    "end": 81
+  },
+  "transition": {
+    "path": "docverify/states.py",
+    "start": 66,
+    "end": 117
+  },
+  "upload": {
+    "path": "docverify/api/main.py",
+    "start": 92,
+    "end": 109
+  },
+  "validate": {
+    "path": "docverify/validate.py",
+    "start": 55,
+    "end": 111
+  },
+  "worker-decide": {
+    "path": "docverify/worker.py",
+    "start": 86,
+    "end": 99
+  },
+  "worker-handle": {
+    "path": "docverify/worker.py",
+    "start": 102,
+    "end": 128
+  },
+  "worker-process": {
+    "path": "docverify/worker.py",
+    "start": 40,
+    "end": 59
+  }
+}

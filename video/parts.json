@@ -1,0 +1,12 @@
+[
+  {"part": "p01-upload", "title": "上传：先有 S3 对象和 DynamoDB 里的一条 case", "stage": "upload", "chapter": "01-upload"},
+  {"part": "p02-state", "title": "状态机：条件写只让合法的转移提交", "stage": "state", "chapter": "02-state-machine"},
+  {"part": "p03-intake", "title": "S3 触发 Lambda，按账户进 SQS FIFO", "stage": "lambda", "chapter": "03-intake-lambda-fifo"},
+  {"part": "p04-extract", "title": "抽取和校验：每个字段都带置信度", "stage": "extraction", "chapter": "04-extract-validate"},
+  {"part": "p05-decide", "title": "字段匹配和决策：不确定的 AI 输出不能单独定结果", "stage": "decision", "chapter": "05-match-decide"},
+  {"part": "p06-idempotency", "title": "幂等：重复消息和重启都不会处理两次", "stage": "sqs", "chapter": "06-idempotency"},
+  {"part": "p07-review", "title": "人审：最小堆按风险和等待时间排队", "stage": "review", "chapter": "07-human-review"},
+  {"part": "p08-callback", "title": "回调：一份契约、HMAC 签名、退避重试", "stage": "callback", "chapter": "08-callbacks"},
+  {"part": "p09-learn", "title": "教学模式本身：源码锚点和固定链接", "stage": null, "chapter": "09-frontend-learn-mode"},
+  {"part": "p10-eval", "title": "评测集和发布门禁", "stage": "eval", "chapter": "10-evaluation"}
+]

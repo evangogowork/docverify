@@ -75,6 +75,7 @@ def get_case(case_id: str) -> dict | None:
     return from_item(r["Item"]) if "Item" in r else None
 
 
+# @learn:scan-paginated
 def scan_cases(limit: int = 200, state: str | None = None, fields: list[str] | None = None) -> list[dict]:
     """Paginated scan (a single Scan page stops at 1 MB, which silently hides most of a big table).
     A production deployment would query a GSI on `state` instead."""
@@ -92,6 +93,7 @@ def scan_cases(limit: int = 200, state: str | None = None, fields: list[str] | N
         items.extend(from_item(i) for i in page.get("Items", []))
     items.sort(key=lambda c: c.get("created_at", 0), reverse=True)
     return items[:limit]
+# @learn:end scan-paginated
 
 
 def now() -> float:

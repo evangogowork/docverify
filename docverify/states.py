@@ -88,6 +88,7 @@ def transition(case_id: str, frm: str, to: str, *, round_no: int, actor: str,
                   UpdateExpression="SET " + ", ".join(sets),
                   ExpressionAttributeNames=names, ExpressionAttributeValues=values,
                   ReturnValues="ALL_NEW")
+    # @learn:conditional-write
     if not settings().unsafe_no_conditional_writes:
         # The whole point: commit only if nobody moved the case since we read it.
         kwargs["ConditionExpression"] = "#s = :from AND #r = :round"
@@ -99,6 +100,7 @@ def transition(case_id: str, frm: str, to: str, *, round_no: int, actor: str,
         kwargs["ExpressionAttributeValues"] = {k: v for k, v in values.items()
                                                if k not in (":from", ":round")}
         kwargs["ExpressionAttributeNames"] = {k: v for k, v in names.items() if k != "#r"}
+    # @learn:end conditional-write
     try:
         new = ddb().update_item(**kwargs)["Attributes"]
     except ClientError as e:

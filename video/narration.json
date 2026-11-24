@@ -1,0 +1,58 @@
+[
+  {"id": "s01", "part": "p01-upload", "text": "这一段讲第一步，上传。一份营业执照从平台进到系统里，最先发生的是什么。", "action": "open_learn", "highlight": "#learn-timeline"},
+  {"id": "s02", "part": "p01-upload", "text": "左边是整条流水线的九个阶段。哪一步亮起来，就说明请求现在走到了哪里。这些状态都是从后端实时读的，不是前端放的动画。", "action": "noop", "highlight": "#learn-timeline"},
+  {"id": "s03", "part": "p01-upload", "text": "我选一个低分辨率的扫描件当样例，因为它会一路走到人工审核，能把每个阶段都看一遍。点提交样例。", "action": "submit:lowres", "highlight": "#learn-submit"},
+  {"id": "s04", "part": "p01-upload", "text": "上传这一步做了两件事。先在 DynamoDB 里建一条 case，状态是 UPLOADED，再把文件放进 S3。右边就是 S3 的对象 key 和文件的哈希。", "action": "stage:upload", "highlight": "#stage-detail"},
+  {"id": "s05", "part": "p01-upload", "text": "顺序是故意的。S3 一落地就会触发 Lambda，所以 case 必须先存在。", "action": "stage:s3", "highlight": "#stage-detail"},
+  {"id": "s06", "part": "p01-upload", "text": "上传就讲到这里，下一段看状态机。", "action": "noop", "highlight": "li[data-stage=s3]"},
+
+  {"id": "s07", "part": "p02-state", "text": "这一段讲状态机。一个 case 会被 API、Lambda、好几个 worker 和审核员同时碰，怎么保证不乱。", "action": "panel:#panel-state", "highlight": "#panel-state"},
+  {"id": "s08", "part": "p02-state", "text": "每一次状态变化都是一次条件写。只有当 case 还停在我读到的那个状态时，这次写才会提交。", "action": "noop", "highlight": "#panel-state table"},
+  {"id": "s09", "part": "p02-state", "text": "同一次写里，还会往 case 自己的历史列表追加一条，带一个唯一的写入编号。MySQL 的审计表只是它的投影，一行对一行。", "action": "noop", "highlight": "#panel-state .small"},
+  {"id": "s10", "part": "p02-state", "text": "测试里让二十个线程同时给同一个 case 下结论，只有一个成功。把条件写关掉，二十个全都成功，测试马上变红。", "action": "show_source:test-concurrent-decisions", "highlight": "#panel-state .src"},
+  {"id": "s11", "part": "p02-state", "text": "状态机就是这样，下一段看 Lambda 和队列。", "action": "noop", "highlight": "#panel-state"},
+
+  {"id": "s12", "part": "p03-intake", "text": "这一段讲入队。文件落进 S3 以后，是谁把它交给处理的 worker。", "action": "stage:lambda", "highlight": "li[data-stage=lambda]"},
+  {"id": "s13", "part": "p03-intake", "text": "S3 的事件触发了一个 Lambda。它把 case 从 UPLOADED 推到 QUEUED，再往 SQS 发一条消息。这里是这次调用在 CloudWatch 里真实的日志。", "action": "noop", "highlight": "#stage-detail"},
+  {"id": "s14", "part": "p03-intake", "text": "队列用的是 FIFO，消息分组就是账户编号。同一个账户的材料严格按顺序处理，不同账户之间并行。", "action": "stage:sqs", "highlight": "#stage-detail"},
+  {"id": "s15", "part": "p03-intake", "text": "你可以看到这条消息的分组、序列号，还有是哪个 worker 收到的。下一段看抽取。", "action": "noop", "highlight": "#stage-detail pre"},
+
+  {"id": "s16", "part": "p04-extract", "text": "这一段讲抽取和校验。worker 收到消息以后，要把文件里的字段读出来。", "action": "stage:extraction", "highlight": "li[data-stage=extraction]"},
+  {"id": "s17", "part": "p04-extract", "text": "抽取器藏在一个接口后面，默认用本地的 OCR，也可以换成模型。关键是每个字段都带一个置信度。", "action": "noop", "highlight": "#stage-detail table"},
+  {"id": "s18", "part": "p04-extract", "text": "这张图分辨率很低，有几个字段的置信度明显掉下来了，有的干脆没读到。", "action": "noop", "highlight": "#stage-detail table"},
+  {"id": "s19", "part": "p04-extract", "text": "校验分三类，字段是否齐全，确定性规则比如校验位和有效期，还有每个字段的置信度阈值。校验只给出结果，不做决定。", "action": "stage:validation", "highlight": "#stage-detail table"},
+  {"id": "s20", "part": "p04-extract", "text": "红色的就是没过的检查。下一段看谁有权下结论。", "action": "noop", "highlight": "#stage-detail"},
+
+  {"id": "s21", "part": "p05-decide", "text": "这一段讲匹配和决策。文档上的商家，是不是账户上的那个商家。", "action": "stage:decision", "highlight": "li[data-stage=decision]"},
+  {"id": "s22", "part": "p05-decide", "text": "名字和地址先归一化，去掉变音符号，统一缩写，再查别名表，最后用编辑距离和词集合相似度打分。", "action": "noop", "highlight": "#stage-detail table"},
+  {"id": "s23", "part": "p05-decide", "text": "决策只有一条原则，不确定的 AI 输出不能单独决定账户状态。全部检查通过、匹配也过线，才能自动通过。", "action": "noop", "highlight": "#stage-detail pre"},
+  {"id": "s24", "part": "p05-decide", "text": "这份材料有字段置信度不够，所以它没有被自动通过，也没有被自动驳回，而是进了人工审核，还带着一个风险分。", "action": "noop", "highlight": "#stage-detail pre"},
+  {"id": "s25", "part": "p05-decide", "text": "下一段先插一个话题，重复消息会怎样。", "action": "noop", "highlight": "li[data-stage=review]"},
+
+  {"id": "s26", "part": "p06-idempotency", "text": "这一段讲幂等。队列只保证至少投递一次，同一条消息完全可能来两次。", "action": "stage:sqs", "highlight": "li[data-stage=sqs]"},
+  {"id": "s27", "part": "p06-idempotency", "text": "我现在手动再投一条一模一样的重复消息。", "action": "replay", "highlight": "#learn-replay"},
+  {"id": "s28", "part": "p06-idempotency", "text": "worker 收到了，第一件事是查 Redis 里这一轮是不是已经做完。做完了，就直接确认并丢掉，结果写的是 dedup done。", "action": "wait_replay", "highlight": "#stage-detail"},
+  {"id": "s29", "part": "p06-idempotency", "text": "Redis 只是省力的那一层。真正保证正确的还是条件写，测试里把锁设成两秒就过期，两个 worker 同时做同一步，也只有一个能提交。", "action": "noop", "highlight": "#stage-detail .src"},
+  {"id": "s30", "part": "p06-idempotency", "text": "下一段回到人工审核。", "action": "noop", "highlight": "li[data-stage=review]"},
+
+  {"id": "s31", "part": "p07-review", "text": "这一段讲人审。需要人看的 case，按什么顺序给审核员。", "action": "stage:review", "highlight": "li[data-stage=review]"},
+  {"id": "s32", "part": "p07-review", "text": "用的是一个最小堆，优先级是风险分乘以六十秒，再加上已经等待的秒数。高风险的插队，等久了的低风险也一定能轮到。", "action": "noop", "highlight": "#stage-detail"},
+  {"id": "s33", "part": "p07-review", "text": "领取的时候用条件写占住这个 case，提交结论时再确认还是自己领的。现在我当一回审核员，点通过。", "action": "approve", "highlight": "#learn-review-actions"},
+  {"id": "s34", "part": "p07-review", "text": "人审这一步变成了完成，下一段看回调。", "action": "wait_stage:review", "highlight": "li[data-stage=review]"},
+
+  {"id": "s35", "part": "p08-callback", "text": "这一段讲回调。四个业务平台共用同一份接口契约，结果通过异步回调通知它们。", "action": "wait_stage:callback", "highlight": "li[data-stage=callback]"},
+  {"id": "s36", "part": "p08-callback", "text": "状态变化先写进 MySQL 的回调发件箱，每个 case、每一轮、每个状态只有一行，重放也不会重复。", "action": "noop", "highlight": "#stage-detail pre"},
+  {"id": "s37", "part": "p08-callback", "text": "分发器用 HMAC 签名投递，失败按指数退避重试。平台那边验签，再按事件编号去重。这里能看到签名和平台的接收结果。", "action": "noop", "highlight": "#stage-detail pre"},
+  {"id": "s38", "part": "p08-callback", "text": "到这里，一份材料就走完了全程。", "action": "noop", "highlight": "#learn-timeline"},
+
+  {"id": "s39", "part": "p09-learn", "text": "这一段讲教学模式本身是怎么做的，尤其是这些看源码的链接。", "action": "panel:#panel-learn", "highlight": "#panel-learn"},
+  {"id": "s40", "part": "p09-learn", "text": "源码里用注释把关键代码圈起来，构建的时候脚本扫出文件和行号，行号从来不手写。", "action": "stage:extraction", "highlight": "#stage-detail .src"},
+  {"id": "s41", "part": "p09-learn", "text": "链接固定在构建时的那个提交上，不指向主分支，所以代码以后改了，链接也不会错位。持续集成里还有一个检查，锚点丢了就失败。", "action": "show_source:ocr", "highlight": "#stage-detail .src"},
+  {"id": "s42", "part": "p09-learn", "text": "每个阶段旁边都有看讲解视频的按钮，你现在看的就是其中一段。", "action": "noop", "highlight": ".video-btn"},
+
+  {"id": "s43", "part": "p10-eval", "text": "最后一段讲评测集和发布门禁。怎么证明它在难的输入上也不乱下结论。", "action": "panel:#panel-eval", "highlight": "#panel-eval"},
+  {"id": "s44", "part": "p10-eval", "text": "评测集分五类，干净的、图像质量差的、被篡改的、格式不支持的，还有不同地区和文字的名字。每一类单独算准确率。", "action": "open_eval", "highlight": "#panel-eval table"},
+  {"id": "s45", "part": "p10-eval", "text": "最重要的一列是错误的自动通过，门禁要求它是零。名字分组之间的自动通过率差距也有上限。", "action": "noop", "highlight": "#panel-eval table"},
+  {"id": "s46", "part": "p10-eval", "text": "第一次跑的时候门禁就没过，带变音符号的名字被英文 OCR 读错了。加上拉丁文字模型以后才通过。持续集成每次都跑它。", "action": "noop", "highlight": "#panel-eval"},
+  {"id": "s47", "part": "p10-eval", "text": "整个项目就讲完了。面试题在旁边的标签页里，每道题都能点开看答案。", "action": "interview", "highlight": "details.qa"}
+]

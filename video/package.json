@@ -1,0 +1,7 @@
+{
+  "name": "docverify-video",
+  "private": true,
+  "type": "module",
+  "scripts": { "record": "node record.mjs" },
+  "devDependencies": { "@playwright/test": "1.57.0" }
+}
