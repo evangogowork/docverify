@@ -13,10 +13,12 @@ import signal
 import socket
 import time
 
-from . import cases, db, states
+from . import accounts, cases, db, states
 from .aws import queue_url, s3, sqs
 from .config import settings
 from .extract import Extraction, UnsupportedFormat, get_extractor
+from .pipeline import matches_for
+from .decide import decide
 from .validate import validate
 
 
@@ -73,6 +75,21 @@ class Worker:
         return states.transition(case["case_id"], "EXTRACTED", "VALIDATED", round_no=case["round"],
                                  actor=f"worker:{self.id}", reason=f"{len(failed)} failed checks",
                                  updates={"validation": checks}, detail={"failed": failed})
+
+    # @learn:worker-decide
+    def _step_validated(self, case: dict, body: dict) -> dict:
+        ex = Extraction.from_dict(case["extraction"])
+        account = accounts.get(case["account_id"])
+        matches = matches_for(ex, account, accounts.alias_index())
+        d = decide(case["validation"], matches)
+        if account is None:
+            d = {**d, "decision": "IN_REVIEW", "automated": False, "reasons": ["unknown_account", *d["reasons"]]}
+        return states.transition(case["case_id"], "VALIDATED", d["decision"], round_no=case["round"],
+                                 actor=f"worker:{self.id}", reason=",".join(d["reasons"])[:255] or "all checks passed",
+                                 updates={"matches": matches, "decision_detail": d, "risk_score": d["risk"],
+                                          "review_enqueued_at": cases.now()},
+                                 detail={"decision": d, "matches": matches})
+    # @learn:end worker-decide
 
     # ---- the loop ---------------------------------------------------------------------------
     def handle(self, msg: dict) -> str:

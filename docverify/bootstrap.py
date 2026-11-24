@@ -10,7 +10,7 @@ import hashlib
 import json
 import os
 
-from . import db, lambda_pkg
+from . import accounts, db, lambda_pkg
 from .aws import client, ddb, s3, sqs
 from .config import settings
 
@@ -115,6 +115,7 @@ def main() -> None:
     ensure_bucket()
     ensure_table()
     db.apply_schema()
+    accounts.seed()
     ensure_queues()
     ensure_lambda()
     print("bootstrap ok:", settings().bucket, settings().table)

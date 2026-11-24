@@ -40,3 +40,10 @@ CREATE TABLE IF NOT EXISTS extraction_runs (
   started_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   KEY idx_case (case_id)
 );
+CREATE TABLE IF NOT EXISTS accounts (
+  account_id VARCHAR(40) PRIMARY KEY,
+  platform VARCHAR(24) NOT NULL,
+  legal_name VARCHAR(255) NOT NULL,
+  aliases JSON NOT NULL,
+  address VARCHAR(255) NOT NULL
+);
