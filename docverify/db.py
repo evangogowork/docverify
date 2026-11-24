@@ -49,7 +49,7 @@ def execute(sql: str, args=None) -> int:
 
 def apply_schema(path: Path | None = None, retries: int = 30) -> None:
     path = path or Path(__file__).resolve().parent.parent / "sql" / "schema.sql"
-    sql = path.read_text()
+    sql = "\n".join(l for l in path.read_text().splitlines() if not l.strip().startswith("--"))
     for attempt in range(retries):
         try:
             for stmt in [s.strip() for s in sql.split(";") if s.strip()]:

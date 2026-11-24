@@ -47,3 +47,14 @@ CREATE TABLE IF NOT EXISTS accounts (
   aliases JSON NOT NULL,
   address VARCHAR(255) NOT NULL
 );
+CREATE TABLE IF NOT EXISTS api_clients (
+  client_id VARCHAR(64) PRIMARY KEY,
+  platform VARCHAR(24) NOT NULL,
+  secret_hash VARCHAR(200) NOT NULL,          -- pbkdf2_sha256$iterations$salt$hash (the secret itself is never stored)
+  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
+);
+CREATE TABLE IF NOT EXISTS reviewers (
+  username VARCHAR(64) PRIMARY KEY,
+  password_hash VARCHAR(200) NOT NULL,
+  role VARCHAR(16) NOT NULL DEFAULT 'reviewer'
+);

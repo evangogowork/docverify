@@ -75,10 +75,23 @@ def get_case(case_id: str) -> dict | None:
     return from_item(r["Item"]) if "Item" in r else None
 
 
-def scan_cases(limit: int = 200) -> list[dict]:
-    r = ddb().scan(TableName=settings().table, Limit=limit)
-    items = [from_item(i) for i in r.get("Items", [])]
-    return sorted(items, key=lambda c: c.get("created_at", 0), reverse=True)
+def scan_cases(limit: int = 200, state: str | None = None, fields: list[str] | None = None) -> list[dict]:
+    """Paginated scan (a single Scan page stops at 1 MB, which silently hides most of a big table).
+    A production deployment would query a GSI on `state` instead."""
+    kw: dict = {"TableName": settings().table}
+    if state:
+        kw.update(FilterExpression="#s = :s", ExpressionAttributeNames={"#s": "state"},
+                  ExpressionAttributeValues={":s": {"S": state}})
+    if fields:
+        names = kw.setdefault("ExpressionAttributeNames", {})
+        for i, f in enumerate(fields):
+            names[f"#f{i}"] = f
+        kw["ProjectionExpression"] = ", ".join(f"#f{i}" for i in range(len(fields)))
+    items: list[dict] = []
+    for page in ddb().get_paginator("scan").paginate(**kw):
+        items.extend(from_item(i) for i in page.get("Items", []))
+    items.sort(key=lambda c: c.get("created_at", 0), reverse=True)
+    return items[:limit]
 
 
 def now() -> float:

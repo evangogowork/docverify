@@ -6,11 +6,34 @@ from fastapi.testclient import TestClient
 from docverify import cases
 from docverify.aws import queue_url, sqs
 
+_tokens: dict[str, str] = {}
+
+
+def auth_headers(platform: str = "learn") -> dict:
+    """Bearer header for a demo platform client (seeded by bootstrap with DOCVERIFY_SEED_DEMO=1)."""
+    if platform not in _tokens:
+        from docverify.api.main import app
+        r = TestClient(app).post("/v1/auth/token", json={"client_id": f"{platform}-demo",
+                                                         "client_secret": f"demo-secret-{platform}"})
+        assert r.status_code == 200, r.text
+        _tokens[platform] = r.json()["access_token"]
+    return {"Authorization": f"Bearer {_tokens[platform]}"}
+
+
+def reviewer_headers() -> dict:
+    if "reviewer" not in _tokens:
+        from docverify.api.main import app
+        r = TestClient(app).post("/v1/auth/login", json={"username": "reviewer", "password": "reviewer-demo-pass"})
+        assert r.status_code == 200, r.text
+        _tokens["reviewer"] = r.json()["access_token"]
+    return {"Authorization": f"Bearer {_tokens['reviewer']}"}
+
 
 def upload(client: TestClient, account_id: str, body: bytes, name="doc.txt", ctype="text/plain",
            doc_type="business_license", headers=None) -> str:
+    # The "learn" demo platform may submit for any account; tests that check isolation pass their own headers.
     r = client.post("/v1/cases", data={"account_id": account_id, "doc_type": doc_type},
-                    files={"file": (name, body, ctype)}, headers=headers or {})
+                    files={"file": (name, body, ctype)}, headers=headers or auth_headers())
     assert r.status_code == 201, r.text
     return r.json()["case_id"]
 

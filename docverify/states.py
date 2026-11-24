@@ -63,7 +63,9 @@ def _native(v):
 
 # @learn:transition
 def transition(case_id: str, frm: str, to: str, *, round_no: int, actor: str,
-               reason: str = "", updates: dict | None = None, detail: dict | None = None) -> dict:
+               reason: str = "", updates: dict | None = None, detail: dict | None = None,
+               condition: tuple[str, dict] | None = None) -> dict:
+    """`condition` adds an extra clause, e.g. ("claimed_by = :me", {":me": {"S": "alice"}})."""
     if to not in TRANSITIONS.get(frm, set()):
         raise IllegalTransition(f"{frm} -> {to} is not a legal transition")
     write_id = uuid.uuid4().hex
@@ -87,6 +89,9 @@ def transition(case_id: str, frm: str, to: str, *, round_no: int, actor: str,
     if not settings().unsafe_no_conditional_writes:
         # The whole point: commit only if nobody moved the case since we read it.
         kwargs["ConditionExpression"] = "#s = :from AND #r = :round"
+        if condition:
+            kwargs["ConditionExpression"] += f" AND ({condition[0]})"
+            kwargs["ExpressionAttributeValues"] = {**values, **condition[1]}
     else:
         # Unsafe control: write blindly. Drop the placeholders only the condition used.
         kwargs["ExpressionAttributeValues"] = {k: v for k, v in values.items()
@@ -129,7 +134,9 @@ def _write_audit(write_id, case_id, round_no, frm, to, actor, reason, detail) ->
 def reconcile(case_ids: list[str] | None = None) -> int:
     """Back-fill audit rows for committed transitions whose audit insert never ran (crash window)."""
     filled = 0
-    targets = case_ids if case_ids is not None else [c["case_id"] for c in cases.scan_cases(10_000)]
+    targets = case_ids if case_ids is not None else [
+        c["case_id"] for c in cases.scan_cases(1_000_000, fields=["case_id", "updated_at"])
+        if cases.now() - float(c.get("updated_at") or 0) < 3600]   # recent writes are where the crash window is
     for cid in targets:
         c = cases.get_case(cid)
         for h in (c or {}).get("history", []) or []:

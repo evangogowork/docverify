@@ -54,8 +54,8 @@ def test_worker_drives_case_to_validated():
     w = start_worker("w-step04")
     try:
         c = TestClient(app)
-        ok = upload(c, "acct_p1", render_png(SPEC), "lic.png", "image/png")
-        bad = upload(c, "acct_p2", b"PK\x03\x04docx", "lic.docx", "application/octet-stream")
+        ok = upload(c, "acct_1001", render_png(SPEC), "lic.png", "image/png")
+        bad = upload(c, "acct_1002", b"PK\x03\x04docx", "lic.docx", "application/octet-stream")
         case = wait_state(ok, {"VALIDATED", "APPROVED", "IN_REVIEW", "REJECTED"})
         assert case["extraction"]["fields"]["business_name"]["value"] == "Acme Widgets LLC"
         assert all(ch["passed"] for ch in case["validation"])

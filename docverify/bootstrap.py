@@ -10,7 +10,7 @@ import hashlib
 import json
 import os
 
-from . import accounts, db, lambda_pkg
+from . import accounts, auth, db, lambda_pkg
 from .aws import client, ddb, s3, sqs
 from .config import settings
 
@@ -95,11 +95,13 @@ def ensure_lambda() -> None:
                            Principal="s3.amazonaws.com", SourceArn=f"arn:aws:s3:::{s.bucket}")
     except ClientError:
         pass
+    # @learn:s3-notification
     s3().put_bucket_notification_configuration(
         Bucket=s.bucket,
         NotificationConfiguration={"LambdaFunctionConfigurations": [
             {"LambdaFunctionArn": arn, "Events": ["s3:ObjectCreated:*"]}]},
     )
+    # @learn:end s3-notification
 
 
 def _wait_lambda(lam, name: str) -> None:
@@ -116,6 +118,8 @@ def main() -> None:
     ensure_table()
     db.apply_schema()
     accounts.seed()
+    if os.environ.get("DOCVERIFY_SEED_DEMO") == "1":
+        auth.seed_demo()          # local-dev identities with placeholder secrets
     ensure_queues()
     ensure_lambda()
     print("bootstrap ok:", settings().bucket, settings().table)

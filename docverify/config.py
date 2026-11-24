@@ -21,7 +21,7 @@ class Settings:
     mysql_url: str = field(default_factory=lambda: _env(
         "MYSQL_URL", "mysql://docverify:docverify-dev@127.0.0.1:33501/docverify"))
     redis_url: str = field(default_factory=lambda: _env("REDIS_URL", "redis://127.0.0.1:63501/0"))
-    jwt_secret: str = field(default_factory=lambda: _env("DOCVERIFY_JWT_SECRET", "dev-only-change-me"))
+    jwt_secret: str = field(default_factory=lambda: _env("DOCVERIFY_JWT_SECRET", "dev-only-placeholder-change-me-in-production"))
     max_receives: int = field(default_factory=lambda: int(_env("DOCVERIFY_MAX_RECEIVES", "4")))
     visibility_timeout: int = field(default_factory=lambda: int(_env("DOCVERIFY_VISIBILITY_TIMEOUT", "20")))
     learn_mode: bool = field(default_factory=lambda: _env("DOCVERIFY_LEARN_MODE", "1") == "1")

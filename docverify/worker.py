@@ -176,8 +176,8 @@ class Worker:
         if not dedup.singleton("sweeper", 10):
             return
         stuck_after = float(os.environ.get("DOCVERIFY_STUCK_AFTER", "30"))
-        for c in cases.scan_cases(1000):
-            if c["state"] == "UPLOADED" and c.get("s3_key") and cases.now() - float(c.get("updated_at", 0)) > stuck_after:
+        for c in cases.scan_cases(100_000, state="UPLOADED", fields=["case_id", "state", "s3_key", "updated_at"]):
+            if c.get("s3_key") and cases.now() - float(c.get("updated_at", 0)) > stuck_after:
                 event = {"Records": [{"s3": {"bucket": {"name": settings().bucket}, "object": {"key": c["s3_key"]}}}]}
                 client("lambda").invoke(FunctionName=settings().lambda_name, InvocationType="Event",
                                         Payload=json.dumps(event).encode())

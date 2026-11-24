@@ -2,6 +2,7 @@ import os
 
 # Short timeouts so retry/redelivery scenarios finish in seconds. Set before anything reads settings().
 os.environ.setdefault("DOCVERIFY_VISIBILITY_TIMEOUT", "6")
+os.environ.setdefault("DOCVERIFY_SEED_DEMO", "1")
 os.environ.setdefault("DOCVERIFY_RETRY_BASE", "0.5")
 os.environ.setdefault("DOCVERIFY_RETRY_CAP", "4")
 os.environ.setdefault("DOCVERIFY_STUCK_AFTER", "20")
