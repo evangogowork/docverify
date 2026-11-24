@@ -5,7 +5,7 @@ import hashlib
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 
-from .. import cases
+from .. import cases, states
 from ..aws import s3
 from ..config import settings
 
@@ -39,7 +39,7 @@ async def create_case(
         "content_type": file.content_type or "application/octet-stream",
         "created_at": cases.now(), "updated_at": cases.now(),
     }
-    cases.put_new_case(case)
+    states.create(case, actor="api")
     s3().put_object(Bucket=settings().bucket, Key=key, Body=body, ContentType=case["content_type"],
                     Metadata={"case_id": case_id, "account_id": account_id, "round": "1"})
     return {"case_id": case_id, "state": "UPLOADED", "s3_key": key}
@@ -52,3 +52,8 @@ def get_case(case_id: str):
     if not c:
         raise HTTPException(404, "no such case")
     return c
+
+
+@app.get("/v1/cases/{case_id}/audit")
+def get_audit(case_id: str):
+    return states.audit_rows(case_id)

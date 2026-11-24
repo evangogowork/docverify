@@ -25,7 +25,17 @@ def _ser(v: Any) -> dict:
 JSON_FIELDS = {"extraction", "validation", "decision_detail", "review", "matches"}
 
 
+def _native_de(v: dict) -> Any:
+    if "M" in v:
+        return {k: _native_de(x) for k, x in v["M"].items()}
+    if "L" in v:
+        return [_native_de(x) for x in v["L"]]
+    return _de("", v)
+
+
 def _de(k: str, v: dict) -> Any:
+    if "M" in v or "L" in v:
+        return _native_de(v)
     if "NULL" in v:
         return None
     if "BOOL" in v:

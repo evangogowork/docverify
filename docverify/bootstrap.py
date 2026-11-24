@@ -5,6 +5,7 @@ import time
 
 from botocore.exceptions import ClientError
 
+from . import db
 from .aws import ddb, s3
 from .config import settings
 
@@ -39,6 +40,7 @@ def ensure_table() -> None:
 def main() -> None:
     ensure_bucket()
     ensure_table()
+    db.apply_schema()
     print("bootstrap ok:", settings().bucket, settings().table)
 
 

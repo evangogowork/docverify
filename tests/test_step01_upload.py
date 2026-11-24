@@ -24,3 +24,12 @@ def test_rejects_unknown_doc_type():
     r = c.post("/v1/cases", data={"account_id": "a", "doc_type": "selfie"},
                files={"file": ("x.png", b"x", "image/png")})
     assert r.status_code == 422
+
+
+def test_upload_writes_creation_audit():
+    from docverify import states
+    c = TestClient(app)
+    r = c.post("/v1/cases", data={"account_id": "acct_1", "doc_type": "tax_certificate"},
+               files={"file": ("t.txt", b"tax", "text/plain")})
+    rows = states.audit_rows(r.json()["case_id"])
+    assert [(x["from_state"], x["to_state"]) for x in rows] == [("NEW", "UPLOADED")]
