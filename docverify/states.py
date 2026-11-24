@@ -31,6 +31,8 @@ TRANSITIONS: dict[str, set[str]] = {
     "FAILED": set(),
 }
 TERMINAL = {"APPROVED", "REJECTED", "FAILED"}
+# Platform-visible states: entering one writes a callback outbox row.
+NOTIFY_STATES = {"IN_REVIEW", "APPROVED", "REJECTED", "RESUBMIT_REQUESTED", "FAILED"}
 # States after which this round's automated pipeline has nothing left to do.
 PIPELINE_DONE = {"IN_REVIEW", "RESUBMIT_REQUESTED"} | TERMINAL
 # @learn:end state-machine
@@ -105,7 +107,11 @@ def transition(case_id: str, frm: str, to: str, *, round_no: int, actor: str,
         cur = cases.get_case(case_id)
         raise Conflict(case_id, frm, cur["state"] if cur else None) from None
     _write_audit(write_id, case_id, round_no, frm, to, actor, reason, detail)
-    return cases.from_item(new)
+    case = cases.from_item(new)
+    if to in NOTIFY_STATES and case.get("platform"):
+        from . import callbacks   # lazy: the intake Lambda never reaches a notify state
+        callbacks.enqueue(case, to, [r for r in reason.split(",") if r])
+    return case
 # @learn:end transition
 
 

@@ -9,7 +9,7 @@ from botocore.exceptions import ClientError
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Response, UploadFile
 from pydantic import BaseModel
 
-from .. import accounts, auth, cases, samples, states
+from .. import accounts, auth, callbacks, cases, db, samples, states
 from ..aws import ddb, s3
 from ..config import settings
 from ..review import ReviewQueue
@@ -166,6 +166,26 @@ async def resubmit(case_id: str, file: UploadFile = File(...), p: dict = Depends
     _store(case_id, c["account_id"], new_round, file.filename or "document", body, ctype)
     return {"case_id": case_id, "state": "UPLOADED", "round": new_round}
 # @learn:end resubmit
+
+
+# ---- callbacks ----------------------------------------------------------------------------------
+class Webhook(BaseModel):
+    url: str
+
+
+@app.put("/v1/webhooks")
+def put_webhook(body: Webhook, p: dict = Depends(auth.require_platform)):
+    """Register the platform's callback URL. The signing secret is returned once, here."""
+    if not body.url.startswith(("http://", "https://")):
+        raise HTTPException(422, "url must be http(s)")
+    return {"platform": p["platform"], "url": body.url, "secret": callbacks.register_webhook(p["platform"], body.url)}
+
+
+@app.get("/v1/cases/{case_id}/callbacks")
+def get_callbacks(case_id: str, p: dict = Depends(auth.principal)):
+    _visible(cases.get_case(case_id), p)
+    return db.query("SELECT id, round_no, status, attempts, delivered_at, dead, last_error FROM callback_outbox"
+                    " WHERE case_id=%s ORDER BY id", (case_id,))
 
 
 # ---- human review -------------------------------------------------------------------------------

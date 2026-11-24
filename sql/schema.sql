@@ -58,3 +58,34 @@ CREATE TABLE IF NOT EXISTS reviewers (
   password_hash VARCHAR(200) NOT NULL,
   role VARCHAR(16) NOT NULL DEFAULT 'reviewer'
 );
+CREATE TABLE IF NOT EXISTS webhooks (
+  platform VARCHAR(24) PRIMARY KEY,
+  url VARCHAR(500) NOT NULL,
+  secret VARCHAR(100) NOT NULL,
+  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
+);
+CREATE TABLE IF NOT EXISTS callback_outbox (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  case_id VARCHAR(40) NOT NULL,
+  round_no INT NOT NULL,
+  status VARCHAR(24) NOT NULL,
+  platform VARCHAR(24) NOT NULL,
+  payload JSON NOT NULL,
+  attempts INT NOT NULL DEFAULT 0,
+  next_attempt_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  delivered_at DATETIME(3) NULL,
+  dead TINYINT NOT NULL DEFAULT 0,
+  last_error VARCHAR(255) NOT NULL DEFAULT '',
+  UNIQUE KEY uq_event (case_id, round_no, status),
+  KEY idx_due (delivered_at, dead, next_attempt_at)
+);
+CREATE TABLE IF NOT EXISTS callback_attempts (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  outbox_id BIGINT NOT NULL,
+  attempt INT NOT NULL,
+  http_status INT NULL,
+  error VARCHAR(255) NOT NULL DEFAULT '',
+  signature VARCHAR(200) NOT NULL,
+  sent_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  KEY idx_outbox (outbox_id)
+);
