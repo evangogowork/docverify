@@ -30,7 +30,7 @@ def conn():
         _local.url = settings().mysql_url
     else:
         try:
-            c.ping(reconnect=True)
+            c.ping(reconnect=False)
         except pymysql.err.Error:
             c = _local.conn = _connect()
     return c

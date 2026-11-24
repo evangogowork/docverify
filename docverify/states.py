@@ -20,10 +20,10 @@ from .config import settings
 
 # @learn:state-machine
 TRANSITIONS: dict[str, set[str]] = {
-    "UPLOADED": {"QUEUED"},
+    "UPLOADED": {"QUEUED", "FAILED"},
     "QUEUED": {"EXTRACTED", "RESUBMIT_REQUESTED", "FAILED"},
     "EXTRACTED": {"VALIDATED", "FAILED"},
-    "VALIDATED": {"APPROVED", "REJECTED", "IN_REVIEW", "RESUBMIT_REQUESTED"},
+    "VALIDATED": {"APPROVED", "REJECTED", "IN_REVIEW", "RESUBMIT_REQUESTED", "FAILED"},
     "IN_REVIEW": {"APPROVED", "REJECTED", "RESUBMIT_REQUESTED"},
     "RESUBMIT_REQUESTED": {"UPLOADED"},
     "APPROVED": set(),
@@ -88,8 +88,10 @@ def transition(case_id: str, frm: str, to: str, *, round_no: int, actor: str,
         # The whole point: commit only if nobody moved the case since we read it.
         kwargs["ConditionExpression"] = "#s = :from AND #r = :round"
     else:
+        # Unsafe control: write blindly. Drop the placeholders only the condition used.
         kwargs["ExpressionAttributeValues"] = {k: v for k, v in values.items()
                                                if k not in (":from", ":round")}
+        kwargs["ExpressionAttributeNames"] = {k: v for k, v in names.items() if k != "#r"}
     try:
         new = ddb().update_item(**kwargs)["Attributes"]
     except ClientError as e:
