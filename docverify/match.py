@@ -23,7 +23,13 @@ NAME_VARIANTS = {"muhammad": "mohammed", "mohamed": "mohammed", "mohammad": "moh
                  "yusuf": "yousef", "youssef": "yousef", "aleksandr": "alexander", "aleksander": "alexander"}
 
 
+# Letters NFKD does not decompose into base + combining mark.
+TRANSLIT = str.maketrans({"ø": "o", "Ø": "O", "æ": "ae", "Æ": "AE", "ß": "ss", "đ": "d", "Đ": "D",
+                          "ł": "l", "Ł": "L", "œ": "oe", "Œ": "OE", "þ": "th", "ı": "i"})
+
+
 def strip_marks(s: str) -> str:
+    s = s.translate(TRANSLIT)
     return "".join(ch for ch in unicodedata.normalize("NFKD", s) if not unicodedata.combining(ch))
 
 

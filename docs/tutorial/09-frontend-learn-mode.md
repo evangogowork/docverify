@@ -61,7 +61,15 @@
 3. 教学模式：阶段依次亮起、Lambda 的 CloudWatch 日志和 SQS 分组真的出现、当审核员点通过、回调完成、重放一条重复消息看到 `dedup:done`；源码链接的 href 和 `anchors.json` 一致，而且那一行真的有锚点注释。
 4. 面试题标签页：点开一题能看到答案。
 
-E2E_TRACE_PLACEHOLDER
+真实跑一次（`./scripts/demo.sh` 起着）：
+
+```
+$ cd e2e && npx playwright test
+  5 passed
+```
+
+第一次跑的时候教学模式那条是红的：页面报 `v.replace is not a function`。`learn.py` 里写的是 `receipts and receipts[0]...`，列表为空时 Python 返回的是 `[]` 而不是 `None`，前端拿一个数组去当时间格式化，整个页面就崩了。后端改成显式的 `x if cond else None`，前端的时间格式化也加了类型判断。
+这个 bug 只有从界面点才看得到：直接调 API 返回 200，数据也都在。
 
 ## 怎么跑到这一步
 

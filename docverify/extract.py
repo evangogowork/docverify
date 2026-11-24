@@ -11,6 +11,7 @@ import io
 import os
 import re
 import statistics
+from pathlib import Path
 from dataclasses import asdict, dataclass, field
 from typing import Protocol
 
@@ -138,6 +139,15 @@ class PdfTextExtractor:
         return parse_lines(lines, self.name)
 
 
+def ocr_languages() -> tuple[str, str]:
+    """English plus the Latin-script model when it is installed (scripts/fetch_tessdata.sh).
+    The English model alone misreads é, ø, ă in names — see docs/problems.md q04."""
+    d = Path(os.environ.get("DOCVERIFY_TESSDATA", Path(__file__).resolve().parent.parent / ".runtime" / "tessdata"))
+    if (d / "Latin.traineddata").exists() and (d / "eng.traineddata").exists():
+        return "eng+Latin", f"--psm 6 --tessdata-dir {d}"
+    return "eng", "--psm 6"
+
+
 # @learn:ocr
 class TesseractExtractor:
     """OCR with per-word confidences; a line's confidence is its weakest-quartile word confidence."""
@@ -148,7 +158,8 @@ class TesseractExtractor:
         from PIL import Image
 
         img = Image.open(io.BytesIO(data)).convert("L")
-        d = pytesseract.image_to_data(img, output_type=pytesseract.Output.DICT, config="--psm 6")
+        lang, config = ocr_languages()
+        d = pytesseract.image_to_data(img, lang=lang, config=config, output_type=pytesseract.Output.DICT)
         groups: dict[tuple, list[tuple[str, float]]] = {}
         for i, word in enumerate(d["text"]):
             if not word.strip() or float(d["conf"][i]) < 0:

@@ -58,7 +58,25 @@ SET claimed_by = 我, claim_expires = 现在 + 15 分钟
 平台调 `POST /v1/cases/{id}/resubmit`：轮次加一，新文件放在 `r2/` 下面，状态回到 UPLOADED，然后整条流水线再跑一遍。
 history 里两轮的记录都在，第一轮的结论不会被覆盖。
 
-REVIEW_TRACE_PLACEHOLDER
+## 真实跑一次：两轮的 history
+
+e2e 里那个「低分辨率扫描件 → 人审 → 要求重新提交 → 平台重传」的 case，DynamoDB 里的 history 是：
+
+```
+  r1  NEW                -> UPLOADED            api:ecommerce-demo
+  r1  UPLOADED           -> QUEUED              lambda:intake
+  r1  QUEUED             -> EXTRACTED           worker:worker-1
+  r1  EXTRACTED          -> VALIDATED           worker:worker-1
+  r1  VALIDATED          -> IN_REVIEW           worker:worker-1
+  r1  IN_REVIEW          -> RESUBMIT_REQUESTED  reviewer:reviewer
+  r1  RESUBMIT_REQUESTED -> UPLOADED            api:ecommerce-demo
+  r2  UPLOADED           -> QUEUED              lambda:intake
+  r2  QUEUED             -> EXTRACTED           worker:worker-1
+  r2  EXTRACTED          -> VALIDATED           worker:worker-1
+  r2  VALIDATED          -> APPROVED            worker:worker-1
+```
+
+每一行的 actor 都是真正做这一步的那个身份：API 代表哪个平台、哪个 worker、哪个审核员。
 
 ## 代码
 

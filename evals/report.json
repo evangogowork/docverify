@@ -1,0 +1,2607 @@
+{
+ "generated_at": "2026-11-24T14:37:18",
+ "matcher": "full",
+ "seconds": 37.0,
+ "n": 147,
+ "by_category": {
+  "clean": {
+   "n": 24,
+   "accuracy": 1.0,
+   "incorrect_auto_approvals": 0,
+   "auto_approve_rate": 1.0,
+   "decisions": {
+    "APPROVED": 24
+   },
+   "errors": []
+  },
+  "poor_quality": {
+   "n": 48,
+   "accuracy": 1.0,
+   "incorrect_auto_approvals": 0,
+   "auto_approve_rate": 0.0,
+   "decisions": {
+    "IN_REVIEW": 31,
+    "RESUBMIT_REQUESTED": 17
+   },
+   "errors": []
+  },
+  "altered": {
+   "n": 48,
+   "accuracy": 1.0,
+   "incorrect_auto_approvals": 0,
+   "auto_approve_rate": 0.0,
+   "decisions": {
+    "REJECTED": 24,
+    "IN_REVIEW": 24
+   },
+   "errors": []
+  },
+  "unsupported_format": {
+   "n": 15,
+   "accuracy": 1.0,
+   "incorrect_auto_approvals": 0,
+   "auto_approve_rate": 0.0,
+   "decisions": {
+    "RESUBMIT_REQUESTED": 15
+   },
+   "errors": []
+  },
+  "demographic": {
+   "n": 12,
+   "accuracy": 1.0,
+   "incorrect_auto_approvals": 0,
+   "auto_approve_rate": 1.0,
+   "decisions": {
+    "APPROVED": 12
+   },
+   "errors": []
+  }
+ },
+ "auto_match_rate_on_readable_genuine_docs": 1.0,
+ "auto_approve_rate_by_name_group": {
+  "anglo": 1.0,
+  "arabic": 1.0,
+  "chinese": 1.0,
+  "hispanic": 1.0,
+  "indian": 1.0,
+  "japanese": 1.0,
+  "nigerian": 1.0,
+  "nordic": 1.0,
+  "polish": 1.0,
+  "russian": 1.0,
+  "vietnamese": 1.0
+ },
+ "auto_approve_gap_between_name_groups": 0.0,
+ "incorrect_auto_approvals": 0,
+ "rows": [
+  {
+   "category": "clean",
+   "kind": "clean",
+   "account_id": "acct_1001",
+   "group": "anglo",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "pdf",
+   "account_id": "acct_1001",
+   "group": "anglo",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "blur",
+   "account_id": "acct_1001",
+   "group": "anglo",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "present:business_name",
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "lowres",
+   "account_id": "acct_1001",
+   "group": "anglo",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "rule:registration_checksum",
+    "rule:registration_matches_authority",
+    "confidence:business_name",
+    "confidence:registration_number",
+    "confidence:address",
+    "confidence:issue_date"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "noise",
+   "account_id": "acct_1001",
+   "group": "anglo",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:business_name",
+    "present:registration_number",
+    "present:address",
+    "present:issue_date",
+    "present:expiry_date"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "rotate",
+   "account_id": "acct_1001",
+   "group": "anglo",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "tampered",
+   "account_id": "acct_1001",
+   "group": "anglo",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:registration_checksum"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "expired",
+   "account_id": "acct_1001",
+   "group": "anglo",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:not_expired"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "name_mismatch",
+   "account_id": "acct_1001",
+   "group": "anglo",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "address_mismatch",
+   "account_id": "acct_1001",
+   "group": "anglo",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "unsupported_format",
+   "kind": "unsupported",
+   "account_id": "acct_1001",
+   "group": "anglo",
+   "genuine": false,
+   "expected": [
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unsupported format (declared 'application/vnd.openxmlformats-officedocument.word"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "demographic",
+   "kind": "variant_name",
+   "account_id": "acct_1001",
+   "group": "anglo",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "clean",
+   "account_id": "acct_1002",
+   "group": "vietnamese",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "pdf",
+   "account_id": "acct_1002",
+   "group": "vietnamese",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "blur",
+   "account_id": "acct_1002",
+   "group": "vietnamese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "present:business_name",
+    "present:issuing_authority",
+    "confidence:issue_date",
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "lowres",
+   "account_id": "acct_1002",
+   "group": "vietnamese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "format:registration_number",
+    "format:expiry_date",
+    "confidence:business_name",
+    "confidence:registration_number",
+    "confidence:issue_date",
+    "confidence:expiry_date"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "noise",
+   "account_id": "acct_1002",
+   "group": "vietnamese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:registration_number",
+    "present:address",
+    "present:expiry_date",
+    "present:issuing_authority",
+    "format:issue_date"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "rotate",
+   "account_id": "acct_1002",
+   "group": "vietnamese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "tampered",
+   "account_id": "acct_1002",
+   "group": "vietnamese",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:registration_checksum"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "expired",
+   "account_id": "acct_1002",
+   "group": "vietnamese",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:not_expired"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "name_mismatch",
+   "account_id": "acct_1002",
+   "group": "vietnamese",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "address_mismatch",
+   "account_id": "acct_1002",
+   "group": "vietnamese",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "unsupported_format",
+   "kind": "unsupported",
+   "account_id": "acct_1002",
+   "group": "vietnamese",
+   "genuine": false,
+   "expected": [
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unsupported format (declared 'application/vnd.openxmlformats-officedocument.word"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "demographic",
+   "kind": "variant_name",
+   "account_id": "acct_1002",
+   "group": "vietnamese",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "clean",
+   "account_id": "acct_1003",
+   "group": "chinese",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "pdf",
+   "account_id": "acct_1003",
+   "group": "chinese",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "blur",
+   "account_id": "acct_1003",
+   "group": "chinese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "present:expiry_date",
+    "present:issuing_authority",
+    "confidence:business_name",
+    "confidence:registration_number",
+    "confidence:issue_date"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "lowres",
+   "account_id": "acct_1003",
+   "group": "chinese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "format:registration_number",
+    "format:expiry_date",
+    "rule:issuing_authority_valid",
+    "confidence:business_name",
+    "confidence:registration_number",
+    "confidence:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "noise",
+   "account_id": "acct_1003",
+   "group": "chinese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:business_name",
+    "present:registration_number",
+    "present:address",
+    "present:expiry_date",
+    "present:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "rotate",
+   "account_id": "acct_1003",
+   "group": "chinese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "tampered",
+   "account_id": "acct_1003",
+   "group": "chinese",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:registration_checksum"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "expired",
+   "account_id": "acct_1003",
+   "group": "chinese",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:not_expired"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "name_mismatch",
+   "account_id": "acct_1003",
+   "group": "chinese",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "address_mismatch",
+   "account_id": "acct_1003",
+   "group": "chinese",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "unsupported_format",
+   "kind": "unsupported",
+   "account_id": "acct_1003",
+   "group": "chinese",
+   "genuine": false,
+   "expected": [
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unsupported format (declared 'application/vnd.openxmlformats-officedocument.word"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "demographic",
+   "kind": "variant_name",
+   "account_id": "acct_1003",
+   "group": "chinese",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "clean",
+   "account_id": "acct_1004",
+   "group": "arabic",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "pdf",
+   "account_id": "acct_1004",
+   "group": "arabic",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "blur",
+   "account_id": "acct_1004",
+   "group": "arabic",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:business_name",
+    "present:issue_date",
+    "present:issuing_authority",
+    "format:registration_number",
+    "confidence:registration_number"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "lowres",
+   "account_id": "acct_1004",
+   "group": "arabic",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "rule:issuing_authority_valid",
+    "rule:registration_matches_authority",
+    "confidence:business_name",
+    "confidence:registration_number",
+    "confidence:address",
+    "confidence:issue_date"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "noise",
+   "account_id": "acct_1004",
+   "group": "arabic",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:business_name",
+    "present:registration_number",
+    "present:address",
+    "present:expiry_date",
+    "present:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "rotate",
+   "account_id": "acct_1004",
+   "group": "arabic",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "confidence:business_name",
+    "confidence:registration_number",
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "tampered",
+   "account_id": "acct_1004",
+   "group": "arabic",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:registration_checksum"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "expired",
+   "account_id": "acct_1004",
+   "group": "arabic",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:not_expired"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "name_mismatch",
+   "account_id": "acct_1004",
+   "group": "arabic",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "address_mismatch",
+   "account_id": "acct_1004",
+   "group": "arabic",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "unsupported_format",
+   "kind": "unsupported",
+   "account_id": "acct_1004",
+   "group": "arabic",
+   "genuine": false,
+   "expected": [
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unsupported format (declared 'application/vnd.openxmlformats-officedocument.word"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "demographic",
+   "kind": "variant_name",
+   "account_id": "acct_1004",
+   "group": "arabic",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "clean",
+   "account_id": "acct_1005",
+   "group": "hispanic",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "pdf",
+   "account_id": "acct_1005",
+   "group": "hispanic",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "blur",
+   "account_id": "acct_1005",
+   "group": "hispanic",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "present:issue_date",
+    "confidence:business_name",
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "lowres",
+   "account_id": "acct_1005",
+   "group": "hispanic",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "format:registration_number",
+    "confidence:business_name",
+    "confidence:registration_number",
+    "confidence:issue_date",
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "noise",
+   "account_id": "acct_1005",
+   "group": "hispanic",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:business_name",
+    "present:registration_number",
+    "present:address",
+    "present:issue_date",
+    "present:expiry_date"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "rotate",
+   "account_id": "acct_1005",
+   "group": "hispanic",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "tampered",
+   "account_id": "acct_1005",
+   "group": "hispanic",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:registration_checksum"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "expired",
+   "account_id": "acct_1005",
+   "group": "hispanic",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:not_expired"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "name_mismatch",
+   "account_id": "acct_1005",
+   "group": "hispanic",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "address_mismatch",
+   "account_id": "acct_1005",
+   "group": "hispanic",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "unsupported_format",
+   "kind": "unsupported",
+   "account_id": "acct_1005",
+   "group": "hispanic",
+   "genuine": false,
+   "expected": [
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unsupported format (declared 'application/vnd.openxmlformats-officedocument.word"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "demographic",
+   "kind": "variant_name",
+   "account_id": "acct_1005",
+   "group": "hispanic",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "clean",
+   "account_id": "acct_1006",
+   "group": "japanese",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "pdf",
+   "account_id": "acct_1006",
+   "group": "japanese",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "blur",
+   "account_id": "acct_1006",
+   "group": "japanese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:business_name",
+    "present:registration_number",
+    "present:issue_date",
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "lowres",
+   "account_id": "acct_1006",
+   "group": "japanese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "rule:registration_matches_authority",
+    "confidence:registration_number",
+    "confidence:address",
+    "confidence:issue_date",
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "noise",
+   "account_id": "acct_1006",
+   "group": "japanese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:business_name",
+    "present:registration_number",
+    "present:address",
+    "present:issue_date",
+    "present:expiry_date"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "rotate",
+   "account_id": "acct_1006",
+   "group": "japanese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "tampered",
+   "account_id": "acct_1006",
+   "group": "japanese",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:registration_checksum"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "expired",
+   "account_id": "acct_1006",
+   "group": "japanese",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:not_expired"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "name_mismatch",
+   "account_id": "acct_1006",
+   "group": "japanese",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "address_mismatch",
+   "account_id": "acct_1006",
+   "group": "japanese",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "unsupported_format",
+   "kind": "unsupported",
+   "account_id": "acct_1006",
+   "group": "japanese",
+   "genuine": false,
+   "expected": [
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unsupported format (declared 'application/vnd.openxmlformats-officedocument.word"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "demographic",
+   "kind": "variant_name",
+   "account_id": "acct_1006",
+   "group": "japanese",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "clean",
+   "account_id": "acct_1007",
+   "group": "nigerian",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "pdf",
+   "account_id": "acct_1007",
+   "group": "nigerian",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "blur",
+   "account_id": "acct_1007",
+   "group": "nigerian",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:business_name",
+    "present:address",
+    "present:issuing_authority",
+    "confidence:registration_number",
+    "confidence:issue_date"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "lowres",
+   "account_id": "acct_1007",
+   "group": "nigerian",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "present:issue_date",
+    "format:registration_number",
+    "confidence:business_name",
+    "confidence:registration_number",
+    "confidence:address",
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "noise",
+   "account_id": "acct_1007",
+   "group": "nigerian",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:business_name",
+    "present:registration_number",
+    "present:address",
+    "present:issue_date",
+    "present:expiry_date"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "rotate",
+   "account_id": "acct_1007",
+   "group": "nigerian",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "format:registration_number",
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "tampered",
+   "account_id": "acct_1007",
+   "group": "nigerian",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:registration_checksum"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "expired",
+   "account_id": "acct_1007",
+   "group": "nigerian",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:not_expired"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "name_mismatch",
+   "account_id": "acct_1007",
+   "group": "nigerian",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "address_mismatch",
+   "account_id": "acct_1007",
+   "group": "nigerian",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "unsupported_format",
+   "kind": "unsupported",
+   "account_id": "acct_1007",
+   "group": "nigerian",
+   "genuine": false,
+   "expected": [
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unsupported format (declared 'application/vnd.openxmlformats-officedocument.word"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "demographic",
+   "kind": "variant_name",
+   "account_id": "acct_1007",
+   "group": "nigerian",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "clean",
+   "account_id": "acct_1008",
+   "group": "polish",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "pdf",
+   "account_id": "acct_1008",
+   "group": "polish",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "blur",
+   "account_id": "acct_1008",
+   "group": "polish",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:business_name",
+    "present:registration_number",
+    "present:issuing_authority",
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "lowres",
+   "account_id": "acct_1008",
+   "group": "polish",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "rule:registration_checksum",
+    "rule:not_expired",
+    "rule:issue_before_expiry",
+    "confidence:registration_number",
+    "confidence:address",
+    "confidence:issue_date"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "noise",
+   "account_id": "acct_1008",
+   "group": "polish",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:registration_number",
+    "present:address",
+    "present:issue_date",
+    "present:expiry_date",
+    "present:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "rotate",
+   "account_id": "acct_1008",
+   "group": "polish",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "format:registration_number",
+    "confidence:registration_number",
+    "confidence:address",
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "tampered",
+   "account_id": "acct_1008",
+   "group": "polish",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:registration_checksum"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "expired",
+   "account_id": "acct_1008",
+   "group": "polish",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:not_expired"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "name_mismatch",
+   "account_id": "acct_1008",
+   "group": "polish",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "address_mismatch",
+   "account_id": "acct_1008",
+   "group": "polish",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "unsupported_format",
+   "kind": "unsupported",
+   "account_id": "acct_1008",
+   "group": "polish",
+   "genuine": false,
+   "expected": [
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unsupported format (declared 'application/vnd.openxmlformats-officedocument.word"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "demographic",
+   "kind": "variant_name",
+   "account_id": "acct_1008",
+   "group": "polish",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "clean",
+   "account_id": "acct_1009",
+   "group": "indian",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "pdf",
+   "account_id": "acct_1009",
+   "group": "indian",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "blur",
+   "account_id": "acct_1009",
+   "group": "indian",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "present:business_name",
+    "present:issuing_authority",
+    "confidence:issue_date",
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "lowres",
+   "account_id": "acct_1009",
+   "group": "indian",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "format:registration_number",
+    "format:expiry_date",
+    "rule:issuing_authority_valid",
+    "confidence:business_name",
+    "confidence:registration_number",
+    "confidence:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "noise",
+   "account_id": "acct_1009",
+   "group": "indian",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:business_name",
+    "present:registration_number",
+    "present:address",
+    "present:issue_date",
+    "present:expiry_date"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "rotate",
+   "account_id": "acct_1009",
+   "group": "indian",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "confidence:registration_number",
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "tampered",
+   "account_id": "acct_1009",
+   "group": "indian",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:registration_checksum"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "expired",
+   "account_id": "acct_1009",
+   "group": "indian",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:not_expired"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "name_mismatch",
+   "account_id": "acct_1009",
+   "group": "indian",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "address_mismatch",
+   "account_id": "acct_1009",
+   "group": "indian",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "unsupported_format",
+   "kind": "unsupported",
+   "account_id": "acct_1009",
+   "group": "indian",
+   "genuine": false,
+   "expected": [
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unsupported format (declared 'application/vnd.openxmlformats-officedocument.word"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "demographic",
+   "kind": "variant_name",
+   "account_id": "acct_1009",
+   "group": "indian",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "clean",
+   "account_id": "acct_1010",
+   "group": "nordic",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "pdf",
+   "account_id": "acct_1010",
+   "group": "nordic",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "blur",
+   "account_id": "acct_1010",
+   "group": "nordic",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "present:business_name",
+    "present:registration_number",
+    "confidence:address",
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "lowres",
+   "account_id": "acct_1010",
+   "group": "nordic",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "format:registration_number",
+    "confidence:business_name",
+    "confidence:registration_number",
+    "confidence:address",
+    "confidence:issue_date",
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "noise",
+   "account_id": "acct_1010",
+   "group": "nordic",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:business_name",
+    "present:registration_number",
+    "present:address",
+    "present:expiry_date",
+    "present:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "rotate",
+   "account_id": "acct_1010",
+   "group": "nordic",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "rule:issuing_authority_valid",
+    "rule:registration_matches_authority",
+    "confidence:business_name",
+    "confidence:registration_number",
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "tampered",
+   "account_id": "acct_1010",
+   "group": "nordic",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:registration_checksum"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "expired",
+   "account_id": "acct_1010",
+   "group": "nordic",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:not_expired"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "name_mismatch",
+   "account_id": "acct_1010",
+   "group": "nordic",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "address_mismatch",
+   "account_id": "acct_1010",
+   "group": "nordic",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "unsupported_format",
+   "kind": "unsupported",
+   "account_id": "acct_1010",
+   "group": "nordic",
+   "genuine": false,
+   "expected": [
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unsupported format (declared 'application/vnd.openxmlformats-officedocument.word"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "demographic",
+   "kind": "variant_name",
+   "account_id": "acct_1010",
+   "group": "nordic",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "clean",
+   "account_id": "acct_1011",
+   "group": "russian",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "pdf",
+   "account_id": "acct_1011",
+   "group": "russian",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "blur",
+   "account_id": "acct_1011",
+   "group": "russian",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "present:business_name",
+    "present:issuing_authority",
+    "confidence:issue_date",
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "lowres",
+   "account_id": "acct_1011",
+   "group": "russian",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "rule:registration_checksum",
+    "rule:issuing_authority_valid",
+    "rule:registration_matches_authority",
+    "confidence:business_name",
+    "confidence:registration_number",
+    "confidence:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "noise",
+   "account_id": "acct_1011",
+   "group": "russian",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:business_name",
+    "present:registration_number",
+    "present:address",
+    "present:issue_date",
+    "present:expiry_date"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "rotate",
+   "account_id": "acct_1011",
+   "group": "russian",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "format:issue_date",
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "tampered",
+   "account_id": "acct_1011",
+   "group": "russian",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:registration_checksum"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "expired",
+   "account_id": "acct_1011",
+   "group": "russian",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:not_expired"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "name_mismatch",
+   "account_id": "acct_1011",
+   "group": "russian",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "address_mismatch",
+   "account_id": "acct_1011",
+   "group": "russian",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "unsupported_format",
+   "kind": "unsupported",
+   "account_id": "acct_1011",
+   "group": "russian",
+   "genuine": false,
+   "expected": [
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unsupported format (declared 'application/vnd.openxmlformats-officedocument.word"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "demographic",
+   "kind": "variant_name",
+   "account_id": "acct_1011",
+   "group": "russian",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "clean",
+   "account_id": "acct_1012",
+   "group": "vietnamese",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "clean",
+   "kind": "pdf",
+   "account_id": "acct_1012",
+   "group": "vietnamese",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "blur",
+   "account_id": "acct_1012",
+   "group": "vietnamese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:registration_number",
+    "present:address",
+    "present:issuing_authority",
+    "match:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "lowres",
+   "account_id": "acct_1012",
+   "group": "vietnamese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "format:registration_number",
+    "confidence:business_name",
+    "confidence:registration_number",
+    "confidence:address",
+    "confidence:issue_date",
+    "confidence:expiry_date"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "noise",
+   "account_id": "acct_1012",
+   "group": "vietnamese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unreadable",
+    "present:business_name",
+    "present:registration_number",
+    "present:address",
+    "present:issue_date",
+    "present:expiry_date"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "poor_quality",
+   "kind": "rotate",
+   "account_id": "acct_1012",
+   "group": "vietnamese",
+   "genuine": true,
+   "expected": [
+    "IN_REVIEW",
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "confidence:business_name",
+    "confidence:registration_number",
+    "confidence:issuing_authority"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "tampered",
+   "account_id": "acct_1012",
+   "group": "vietnamese",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:registration_checksum"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "expired",
+   "account_id": "acct_1012",
+   "group": "vietnamese",
+   "genuine": false,
+   "expected": [
+    "REJECTED"
+   ],
+   "decision": "REJECTED",
+   "reasons": [
+    "rule:not_expired"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "name_mismatch",
+   "account_id": "acct_1012",
+   "group": "vietnamese",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:business_name"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "altered",
+   "kind": "address_mismatch",
+   "account_id": "acct_1012",
+   "group": "vietnamese",
+   "genuine": false,
+   "expected": [
+    "IN_REVIEW",
+    "REJECTED"
+   ],
+   "decision": "IN_REVIEW",
+   "reasons": [
+    "match:address"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "unsupported_format",
+   "kind": "unsupported",
+   "account_id": "acct_1012",
+   "group": "vietnamese",
+   "genuine": false,
+   "expected": [
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unsupported format (declared 'application/vnd.openxmlformats-officedocument.word"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "demographic",
+   "kind": "variant_name",
+   "account_id": "acct_1012",
+   "group": "vietnamese",
+   "genuine": true,
+   "expected": [
+    "APPROVED"
+   ],
+   "decision": "APPROVED",
+   "reasons": [],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "unsupported_format",
+   "kind": "gif",
+   "account_id": "acct_1001",
+   "group": "anglo",
+   "genuine": false,
+   "expected": [
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unsupported format (declared 'application/octet-stream', magic b'GIF89a\\x01\\x00'"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "unsupported_format",
+   "kind": "heic",
+   "account_id": "acct_1001",
+   "group": "anglo",
+   "genuine": false,
+   "expected": [
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "unsupported format (declared 'application/octet-stream', magic b'\\x00\\x00\\x00\\x1"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  },
+  {
+   "category": "unsupported_format",
+   "kind": "empty_pdf",
+   "account_id": "acct_1001",
+   "group": "anglo",
+   "genuine": false,
+   "expected": [
+    "RESUBMIT_REQUESTED"
+   ],
+   "decision": "RESUBMIT_REQUESTED",
+   "reasons": [
+    "PDF has no text layer"
+   ],
+   "correct": true,
+   "incorrect_auto_approval": false
+  }
+ ],
+ "gate": {
+  "passed": true,
+  "failures": []
+ }
+}

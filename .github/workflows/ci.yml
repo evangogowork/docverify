@@ -1,0 +1,36 @@
+name: ci
+on: [push, pull_request]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: system packages
+        run: sudo apt-get update && sudo apt-get install -y tesseract-ocr fonts-dejavu-core
+      - name: python deps
+        run: python -m venv .venv && .venv/bin/pip install -r requirements.txt
+      - name: tesseract Latin-script model
+        run: ./scripts/fetch_tessdata.sh
+      - name: LocalStack 4.9 / MySQL / Redis
+        run: docker compose up -d --wait
+      - name: bootstrap AWS resources
+        run: .venv/bin/python -m docverify.bootstrap
+      - name: tests (real LocalStack, MySQL, Redis)
+        run: .venv/bin/pytest -p no:warnings
+      - name: evaluation set as a release gate
+        run: .venv/bin/python -m evals.run --no-write
+      - name: problem videos source checks
+        run: .venv/bin/python scripts/build_problem_videos.py > /dev/null
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: node scripts/check_anchors.mjs
+      - run: cd frontend && npm ci && npm run build

@@ -1,0 +1,11 @@
+{
+  "min_accuracy": {
+    "clean": 0.90,
+    "poor_quality": 0.95,
+    "altered": 1.0,
+    "unsupported_format": 1.0,
+    "demographic": 0.80
+  },
+  "max_incorrect_auto_approvals": 0,
+  "max_auto_approve_gap_between_name_groups": 0.25
+}
