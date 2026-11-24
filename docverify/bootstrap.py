@@ -5,6 +5,8 @@ import time
 
 from botocore.exceptions import ClientError
 
+import base64
+import hashlib
 import json
 import os
 
@@ -70,16 +72,21 @@ def ensure_lambda() -> None:
     lam = client("lambda")
     code = lambda_pkg.build_zip()
     env = {"Variables": {**LAMBDA_ENV, "DOCVERIFY_TABLE": s.table, "DOCVERIFY_QUEUE": s.queue}}
+    sha = base64.b64encode(hashlib.sha256(code).digest()).decode()
     try:
-        lam.get_function(FunctionName=s.lambda_name)
-        lam.update_function_code(FunctionName=s.lambda_name, ZipFile=code)
-        _wait_lambda(lam, s.lambda_name)
-        lam.update_function_configuration(FunctionName=s.lambda_name, Environment=env)
+        cfg = lam.get_function(FunctionName=s.lambda_name)["Configuration"]
+        # Redeploying swaps the runtime container; skip it when nothing changed so in-flight
+        # S3 events are not dropped during the swap.
+        if cfg.get("CodeSha256") != sha:
+            lam.update_function_code(FunctionName=s.lambda_name, ZipFile=code)
+            _wait_lambda(lam, s.lambda_name)
+        if cfg.get("Environment", {}).get("Variables") != env["Variables"]:
+            lam.update_function_configuration(FunctionName=s.lambda_name, Environment=env)
     except ClientError:
         lam.create_function(
             FunctionName=s.lambda_name, Runtime="python3.11", Handler="handler.handler",
             Role="arn:aws:iam::000000000000:role/docverify-intake", Code={"ZipFile": code},
-            Timeout=30, MemorySize=256, Environment=env,
+            Timeout=30, MemorySize=512, Environment=env,
         )
     _wait_lambda(lam, s.lambda_name)
     arn = lam.get_function(FunctionName=s.lambda_name)["Configuration"]["FunctionArn"]
