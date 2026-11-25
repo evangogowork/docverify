@@ -83,3 +83,10 @@ def scan_cases(limit: int = 200) -> list[dict]:
     items = [from_item(i) for i in r.get("Items", [])]
     return sorted(items, key=lambda c: c.get("created_at", 0), reverse=True)
 # @learn:end q10-before
+
+
+# @learn:q11-before
+def extract(self, data: bytes, content_type: str) -> Extraction:
+    kind = sniff(data, content_type)
+    return self.by_type[kind].extract(data, kind)    # field confidence = whatever Tesseract reported
+# @learn:end q11-before

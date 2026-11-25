@@ -19,7 +19,7 @@
 
 ## 日常问题（`problems/`）
 
-每个问题一段代码讲解：先看修复前的写法和现象，再看修复后的写法，讲到哪几行就用红框框出哪几行。内容来自 [`video/problems.walk.json`](../../video/problems.walk.json)（由 `scripts/build_problem_videos.py` 按锚点从源码生成），问题的来龙去脉见 [`docs/problems.md`](../problems.md)。
+每个问题一段代码讲解：先看修复前的写法和现象，再看修复后的写法，讲到哪几行就用红框框出哪几行。内容来自 [`video/problems.walk.json`](../../video/problems.walk.json)（由 `scripts/build_problem_videos.mjs` 按锚点从源码生成），问题的来龙去脉见 [`docs/problems.md`](../problems.md)。
 
 - [`q01-lambda-lost-event.mp4`](problems/q01-lambda-lost-event.mp4) — S3 事件丢了，case 停在 UPLOADED
 - [`q02-prefetch-batch.mp4`](problems/q02-prefetch-batch.mp4) — worker 一次预取十条，好文档进了死信
@@ -31,3 +31,4 @@
 - [`q08-concurrent-decisions.mp4`](problems/q08-concurrent-decisions.mp4) — 二十个线程同时下结论，二十个都成功了
 - [`q09-uncapped-backoff.mp4`](problems/q09-uncapped-backoff.mp4) — 毒消息测试超时：退避没有上限
 - [`q10-scan-pagination.mp4`](problems/q10-scan-pagination.mp4) — 单跑能过，全量就失败
+- [`q11-ocr-confidence-not-quality.mp4`](problems/q11-ocr-confidence-not-quality.mp4) — 本地全绿，CI 上两份模糊扫描件被自动通过

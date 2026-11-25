@@ -63,7 +63,7 @@ Then open http://127.0.0.1:5501/learn and press **提交样例**. Demo identitie
 Tests (the stack's containers must be up: `docker-compose up -d`):
 
 ```bash
-.venv/bin/pytest                         # 38 tests against real LocalStack / MySQL / Redis (~4 min)
+.venv/bin/pytest                         # 39 tests against real LocalStack / MySQL / Redis (~4 min)
 ./scripts/failure_controls.sh            # the same tests with each protection switched off (~12 min)
 .venv/bin/python -m evals.run            # evaluation set + release gate
 cd e2e && npx playwright test            # UI end-to-end, needs ./scripts/demo.sh running
@@ -114,7 +114,7 @@ ordering, poison message → DLQ after `maxReceiveCount`, callback retries `503,
 valid signature each time, platform isolation (another platform's case is a 404), and two reviewers never
 claiming the same case. UI: 5 Playwright tests covering both user flows, learn mode, interview and problems tabs.
 
-Ten real problems hit while building this — symptom, how it was located, the fix, the test that proves it — are in
+Eleven problems (ten hit for real while building this) — symptom, how it was located, the fix, the test that proves it — are in
 [docs/problems.md](docs/problems.md), each with a line-by-line video.
 
 ## Evaluation (measured in this repo, on synthetic documents)
@@ -138,6 +138,10 @@ category, and at most a 0.25 gap in auto-approval rate between name-origin group
 - **The gate failed on its first run**: Spanish and Danish names auto-approved at 67% vs 100% for the rest — the
   English OCR model read "Søren" as "Seren" at 0.40 confidence. Fixed by adding Tesseract's Latin-script model and
   transliterating ø/æ/ß, not by lowering a threshold ([chapter 10](docs/tutorial/10-evaluation.md)).
+- **It failed again on its first CI run**: Ubuntu's Tesseract read every field of two blurred scans above
+  threshold, so they were auto-approved. Tesseract's confidence is about the words it read, not the image, so
+  extraction now also measures sharpness (variance of the Laplacian) and caps every field's confidence on a
+  blurred image; the gate was not loosened ([problem q11](docs/problems.md)).
 - These are synthetic documents built to exercise known variations. They show the mechanisms work; they are not a
   real-world accuracy number.
 

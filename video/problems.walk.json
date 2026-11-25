@@ -604,5 +604,80 @@
     "text": "修复前就这一行。它只读了一页，第一页以外的数据就这么悄悄地不见了。"
    }
   ]
+ },
+ {
+  "id": "q11-ocr-confidence-not-quality",
+  "title": "本地全绿，CI 上两份模糊扫描件被自动通过",
+  "subtitle": "门禁：错误的自动通过两次",
+  "lang": "python",
+  "code": "SHARPNESS_MIN = 200.0\nBLURRED_CONFIDENCE_CAP = 0.5\n\n\ndef image_sharpness(data: bytes) -> float:\n    from PIL import Image, ImageFilter, ImageStat\n\n    gray = Image.open(io.BytesIO(data)).convert(\"L\")\n    lap = gray.filter(ImageFilter.Kernel((3, 3), [0, 1, 0, 1, -4, 1, 0, 1, 0], scale=1, offset=128))\n    return ImageStat.Stat(lap).var[0]\n\n\ndef cap_if_blurred(ex: Extraction, data: bytes) -> Extraction:\n    sharpness = image_sharpness(data)\n    if sharpness < SHARPNESS_MIN:\n        ex.warnings.append(f\"image too blurry: sharpness {sharpness:.0f} < {SHARPNESS_MIN:.0f}\")\n        for f in ex.fields.values():\n            f.confidence = min(f.confidence, BLURRED_CONFIDENCE_CAP)\n    return ex",
+  "segments": [
+   {
+    "lines": [],
+    "text": "现象。本地测试全绿，评测门禁也通过。推到持续集成上，门禁失败：两份模糊扫描件被自动通过了。"
+   },
+   {
+    "lines": [],
+    "text": "错误的自动通过，是这个系统最贵的错误，门禁要求它是零。所以这次提交被拦下了，这正是门禁该做的事。"
+   },
+   {
+    "lines": [],
+    "text": "先怀疑两边的数据不一样。样例是代码按固定种子生成的，两边是同一张模糊图，排除。"
+   },
+   {
+    "lines": [],
+    "text": "再看抽取结果。本机实测，模糊图上读到的字段，置信度照样有零点七到零点九五。本机拦下它，只是因为有几个字段没读出来。"
+   },
+   {
+    "lines": [],
+    "text": "持续集成上的另一个版本，把六个字段全读出来了，每个都过了阈值。原因是：把引擎对字的置信度，当成了对图的质量判断。"
+   },
+   {
+    "lines": [
+     1,
+     2
+    ],
+    "text": "修复后，直接量图像本身。清晰度阈值两百，低于它，字段置信度压到零点五。"
+   },
+   {
+    "lines": [
+     8,
+     9,
+     10
+    ],
+    "text": "清晰度用拉普拉斯方差：对图做一次二阶差分，边缘越锐利，方差越大，和用哪个引擎无关。"
+   },
+   {
+    "lines": [
+     14,
+     15,
+     16,
+     17,
+     18
+    ],
+    "text": "低于阈值，记一条警告，把每个字段的置信度压到阈值以下，这个案子就一定进人审。"
+   },
+   {
+    "lines": [],
+    "text": "阈值是在样例上量的：清晰的大约七百五，低分辨率和旋转的六七百，模糊的大约七十，两边都有三倍以上的余量。"
+   },
+   {
+    "lines": [],
+    "text": "证明：测试里用一个六个字段全读对、置信度零点九九的假引擎，模糊图还是进人审；阈值改成零，测试就红。"
+   },
+   {
+    "lines": [],
+    "text": "面试里一句话：修法是换一个可靠的信号，而不是把门禁放松。"
+   }
+  ],
+  "example_code": "def extract(self, data: bytes, content_type: str) -> Extraction:\n    kind = sniff(data, content_type)\n    return self.by_type[kind].extract(data, kind)    # field confidence = whatever Tesseract reported",
+  "example_segments": [
+   {
+    "lines": [
+     3
+    ],
+    "text": "修复前，图片抽取完直接返回，字段的置信度，完全是引擎自己报的那个数。"
+   }
+  ]
  }
 ]

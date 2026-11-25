@@ -144,6 +144,11 @@
     "start": 80,
     "end": 85
   },
+  "q11-before": {
+    "path": "docs/problems/snippets/before_fixes.py",
+    "start": 88,
+    "end": 92
+  },
   "receive-batch": {
     "path": "docverify/worker.py",
     "start": 193,
@@ -173,6 +178,11 @@
     "path": "docverify/cases.py",
     "start": 78,
     "end": 96
+  },
+  "sharpness": {
+    "path": "docverify/extract.py",
+    "start": 185,
+    "end": 205
   },
   "sign": {
     "path": "docverify/callbacks.py",

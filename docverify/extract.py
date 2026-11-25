@@ -176,6 +176,35 @@ class TesseractExtractor:
 # @learn:end ocr
 
 
+# Tesseract's confidence describes the words it read, not the image: on a blurred sample, Tesseract 5.5.4
+# reads the fields it finds at 0.73-0.95, and blurred scans only failed here because some fields came back
+# missing. Ubuntu's Tesseract read all six fields above threshold and the eval gate caught two blurred scans
+# auto-approved in CI. So the image itself is measured: variance of the Laplacian, a sharpness score that
+# does not depend on the OCR engine. The synthetic scans measure ~750 clean, 600-700 low-res or rotated,
+# ~70 blurred. A heuristic tuned on these samples, not a general image-quality model.
+# @learn:sharpness
+SHARPNESS_MIN = 200.0
+BLURRED_CONFIDENCE_CAP = 0.5
+
+
+def image_sharpness(data: bytes) -> float:
+    from PIL import Image, ImageFilter, ImageStat
+
+    gray = Image.open(io.BytesIO(data)).convert("L")
+    lap = gray.filter(ImageFilter.Kernel((3, 3), [0, 1, 0, 1, -4, 1, 0, 1, 0], scale=1, offset=128))
+    return ImageStat.Stat(lap).var[0]
+
+
+def cap_if_blurred(ex: Extraction, data: bytes) -> Extraction:
+    sharpness = image_sharpness(data)
+    if sharpness < SHARPNESS_MIN:
+        ex.warnings.append(f"image too blurry: sharpness {sharpness:.0f} < {SHARPNESS_MIN:.0f}")
+        for f in ex.fields.values():
+            f.confidence = min(f.confidence, BLURRED_CONFIDENCE_CAP)
+    return ex
+# @learn:end sharpness
+
+
 class CompositeExtractor:
     name = "composite"
 
@@ -185,7 +214,8 @@ class CompositeExtractor:
 
     def extract(self, data: bytes, content_type: str) -> Extraction:
         kind = sniff(data, content_type)
-        return self.by_type[kind].extract(data, kind)
+        ex = self.by_type[kind].extract(data, kind)
+        return cap_if_blurred(ex, data) if kind.startswith("image/") else ex
 
 
 def get_extractor() -> Extractor:

@@ -34,6 +34,26 @@ def test_blurred_scan_fails_confidence_not_rules():
     assert any(n.startswith("confidence:") for n in names)
 
 
+def test_blurred_scan_goes_to_review_even_if_ocr_is_confident(monkeypatch):
+    """Ubuntu's Tesseract read every field of a blurred scan above threshold; the eval gate caught it in CI.
+    Stand in for that build: an OCR that reads all six fields correctly at 0.99, whatever the image."""
+    from docverify import extract
+
+    def perfect_reader(self, data, content_type):
+        ex = extract.PdfTextExtractor().extract(render_pdf(SPEC), "application/pdf")
+        for f in ex.fields.values():
+            f.confidence, f.source = 0.99, "tesseract"
+        return ex
+
+    monkeypatch.setattr(extract.TesseractExtractor, "extract", perfect_reader)
+    sharp = CompositeExtractor().extract(render_png(SPEC), "image/png")
+    assert sharp.warnings == [] and failed(validate(sharp, "business_license")) == []   # would auto-approve
+    blurred = CompositeExtractor().extract(render_png(SPEC, "blur"), "image/png")
+    assert any(w.startswith("image too blurry") for w in blurred.warnings)
+    names = failed(validate(blurred, "business_license"))
+    assert names and all(n.startswith("confidence:") for n in names), names   # review, not a rule rejection
+
+
 def test_tampered_check_digit_fails_checksum():
     ex = CompositeExtractor().extract(render_pdf(SPEC.with_(registration_number="CA-123456783")), "application/pdf")
     assert "rule:registration_checksum" in failed(validate(ex, "business_license"))
