@@ -7,6 +7,7 @@ receiver.
 """
 from __future__ import annotations
 
+import datetime as dt
 import json
 import os
 
@@ -35,6 +36,11 @@ def _lambda_logs(case_id: str) -> list[str]:
                 start = max(0, i - 1)
                 return [x["message"].rstrip() for x in events[start:i + 3]]
     return []
+
+
+def _ts(d: dt.datetime | None) -> float | None:
+    """MySQL DATETIME columns hold UTC (the container's clock); make that explicit before converting."""
+    return d.replace(tzinfo=dt.timezone.utc).timestamp() if d else None
 
 
 def _receiver(case_id: str) -> list[dict]:
@@ -78,7 +84,7 @@ def trace(case_id: str) -> dict:
                         " body, received_at FROM queue_receipts WHERE case_id=%s ORDER BY id", (case_id,))
     for r in receipts:
         r["body"] = json.loads(r["body"])
-    st["sqs"] = {"done": bool(receipts), "at": receipts[0]["received_at"].timestamp() if receipts else None,
+    st["sqs"] = {"done": bool(receipts), "at": _ts(receipts[0]["received_at"]) if receipts else None,
                  "data": {"receipts": receipts} if receipts else None}
     ex = step("QUEUED", "EXTRACTED") or step("QUEUED", "RESUBMIT_REQUESTED")
     st["extraction"] = {"done": bool(ex), "at": ex["history"]["at"] if ex else None,
@@ -104,7 +110,7 @@ def trace(case_id: str) -> dict:
     final_cb = [o for o in outbox if o["status"] == c["state"]]
     delivered = final_cb[0]["delivered_at"] if final_cb else None
     st["callback"] = {"done": final and bool(final_cb) and all(o["delivered_at"] for o in final_cb),
-                      "at": delivered.timestamp() if delivered else None,
+                      "at": _ts(delivered),
                       "data": {"outbox": outbox, "received_by_platform": _receiver(case_id)} if outbox else None}
 
     order = ["upload", "s3", "lambda", "sqs", "extraction", "validation", "decision", "review", "callback"]

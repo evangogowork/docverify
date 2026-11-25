@@ -37,12 +37,13 @@ async function highlight(sel, shape = "box") {
       document.head.appendChild(st);
     }
     const r = el.getBoundingClientRect();
-    const pad = shp === "circle" ? Math.max(10, r.height * 0.35) : 4;
+    const padX = shp === "circle" ? Math.max(16, r.width * 0.3) : 4;
+    const padY = shp === "circle" ? Math.max(10, r.height * 0.35) : 4;
     const m = document.createElement("div");
     m.className = "rec-mark" + (shp === "circle" ? " circle" : "");
     m.dataset.target = s;
-    Object.assign(m.style, { left: `${r.left + window.scrollX - pad}px`, top: `${r.top + window.scrollY - pad}px`,
-      width: `${r.width + 2 * pad}px`, height: `${r.height + 2 * pad}px` });
+    Object.assign(m.style, { left: `${r.left + window.scrollX - padX}px`, top: `${r.top + window.scrollY - padY}px`,
+      width: `${r.width + 2 * padX}px`, height: `${r.height + 2 * padY}px` });
     document.body.appendChild(m);
   }, [sel || "", shape]);
   await page.waitForTimeout(350);   // let scrolling settle before the frame is captured

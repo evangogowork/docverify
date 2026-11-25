@@ -81,8 +81,8 @@
   },
   "learn-trace": {
     "path": "docverify/learn.py",
-    "start": 47,
-    "end": 118
+    "start": 53,
+    "end": 125
   },
   "normalize": {
     "path": "docverify/match.py",
