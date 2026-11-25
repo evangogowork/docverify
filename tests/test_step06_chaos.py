@@ -23,9 +23,9 @@ ACCTS = ["acct_1001", "acct_1003", "acct_1008", "acct_1009"]   # names OCR reads
 
 
 def genuine(acct: str, i: int) -> tuple[bytes, str, str]:
-    """A correct document for the account (valid check digit, in date): the expected outcome is APPROVED."""
+    """A correct document (valid check digit, in date) as a text-layer PDF: APPROVED on any OCR build, see chapter 10."""
     a = accounts.get(acct)
-    return samples.make("clean" if i % 2 else "pdf", a, seed=i)
+    return samples.make("pdf", a, seed=i)   # scan confidence varies by Tesseract version; these tests are about concurrency
 
 
 def resend_duplicate(case_id: str, n: int) -> None:
