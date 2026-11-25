@@ -63,7 +63,7 @@ Then open http://127.0.0.1:5501/learn and press **提交样例**. Demo identitie
 Tests (the stack's containers must be up: `docker-compose up -d`):
 
 ```bash
-.venv/bin/pytest                         # 35 tests against real LocalStack / MySQL / Redis (~4 min)
+.venv/bin/pytest                         # 38 tests against real LocalStack / MySQL / Redis (~4 min)
 ./scripts/failure_controls.sh            # the same tests with each protection switched off (~12 min)
 .venv/bin/python -m evals.run            # evaluation set + release gate
 cd e2e && npx playwright test            # UI end-to-end, needs ./scripts/demo.sh running

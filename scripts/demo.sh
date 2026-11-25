@@ -9,8 +9,9 @@ mkdir -p .runtime
 [ -d frontend/node_modules ] || (cd frontend && npm install --no-audit --no-fund)
 ./scripts/fetch_tessdata.sh >/dev/null
 $COMPOSE up -d --wait
-.venv/bin/python -m docverify.bootstrap
+# Export before bootstrap: it seeds the demo clients/reviewers only when DOCVERIFY_SEED_DEMO=1.
 export DOCVERIFY_SEED_DEMO=1 DOCVERIFY_LEARN_MODE=1
+.venv/bin/python -m docverify.bootstrap
 pids=()
 .venv/bin/uvicorn docverify.api.main:app --port 8501 > .runtime/api.log 2>&1 & pids+=($!)
 .venv/bin/python -m docverify.worker --id worker-1 > .runtime/worker-1.log 2>&1 & pids+=($!)
