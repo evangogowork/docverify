@@ -36,7 +36,7 @@
   {"id": "s29", "part": "p07-review", "text": "这一段讲人审。点到人审这一步。", "action": "stage:review", "highlight": "li[data-stage=review]"},
   {"id": "s30", "part": "p07-review", "text": "先打开审核视图，这是审核员看到的东西。", "action": "expand:details[data-json=review-view]", "highlight": "details[data-json=review-view]"},
   {"id": "s31", "part": "p07-review", "text": "看这一格低置信度的字段。为什么审核员先看这里？因为机器就是在这里没把握，人要补的正是这一块。", "action": "noop", "highlight": "details[data-json=review-view] td[data-low=true]", "shape": "circle"},
-  {"id": "s32", "part": "p07-review", "text": "排队用的是最小堆，优先级是风险分乘以六十秒，再加已经等待的秒数，所以高风险插队，等久了的也能轮到。现在我当一回审核员，点通过。", "action": "approve", "highlight": "#learn-approve"},
+  {"id": "s32", "part": "p07-review", "text": "排队用的是最小堆，优先级是风险分乘以六十秒，再加已经等待的秒数，所以高风险插队，等久了的也能轮到。现在我当一回审核员，点通过。", "action": "approve", "highlight": "li[data-stage=review]"},
   {"id": "s33", "part": "p07-review", "text": "看结论，审核员给的是通过，记在了这一行里。下一步，平台怎么知道这个结果。", "action": "wait_stage:review", "highlight": "b[data-hl=review-decision]", "shape": "circle"},
 
   {"id": "s34", "part": "p08-callback", "text": "这一段讲回调。点到回调这一步。", "action": "wait_stage:callback", "highlight": "li[data-stage=callback]"},
